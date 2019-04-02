@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>k8s | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="kubernetes的架构从更高层来看，K8S 整体上遵循 C/S 架构，从这个角度来看，可用下面的图来表示其结构1234567891011121314                               +-------------+                                                             |             |">
+<meta name="keywords" content="k8s">
+<meta property="og:type" content="article">
+<meta property="og:title" content="k8s">
+<meta property="og:url" content="http://flwwsg.github.io/2019/01/02/k8s/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="kubernetes的架构从更高层来看，K8S 整体上遵循 C/S 架构，从这个角度来看，可用下面的图来表示其结构1234567891011121314                               +-------------+                                                             |             |">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-02T08:43:41.960Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="k8s">
+<meta name="twitter:description" content="kubernetes的架构从更高层来看，K8S 整体上遵循 C/S 架构，从这个角度来看，可用下面的图来表示其结构1234567891011121314                               +-------------+                                                             |             |">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://flwwsg.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-k8s" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/02/k8s/" class="article-date">
+  <time datetime="2019-01-02T08:43:16.000Z" itemprop="datePublished">2019-01-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/k8s/">k8s</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      k8s
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="kubernetes的架构"><a href="#kubernetes的架构" class="headerlink" title="kubernetes的架构"></a>kubernetes的架构</h3><p>从更高层来看，K8S 整体上遵循 C/S 架构，从这个角度来看，可用下面的图来表示其结构<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">                               +-------------+                              </span><br><span class="line">                               |             |                              </span><br><span class="line">                               |             |               +---------------+</span><br><span class="line">                               |             |       +-----&gt; |     Node 1    |</span><br><span class="line">                               | Kubernetes  |       |       +---------------+</span><br><span class="line">+-----------------+            |   Server    |       |                      </span><br><span class="line">|       CLI       |            |             |       |       +---------------+</span><br><span class="line">|    (Kubectl)    |-----------&gt;| ( Master )  |&lt;------+-----&gt; |     Node 2    |</span><br><span class="line">|                 |            |             |       |       +---------------+</span><br><span class="line">+-----------------+            |             |       |       </span><br><span class="line">                               |             |       |       +---------------+</span><br><span class="line">                               |             |       +-----&gt; |     Node 3    |</span><br><span class="line">                               |             |               +---------------+</span><br><span class="line">                               +-------------+</span><br></pre></td></tr></table></figure></p>
+<p>Master：包含</p>
+<ul>
+<li>接收：外部请求和集群内部的通知反馈</li>
+<li>发布：对集群事件的调度和管理</li>
+<li>存储：存储</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">+----------------------------------------------------------+          </span><br><span class="line">| Master                                                   |          </span><br><span class="line">|              +-------------------------+                 |          </span><br><span class="line">|     +-------&gt;|        API Server       |&lt;--------+       |          </span><br><span class="line">|     |        |                         |         |       |          </span><br><span class="line">|     v        +-------------------------+         v       |          </span><br><span class="line">|   +----------------+     ^      +--------------------+   |          </span><br><span class="line">|   |                |     |      |                    |   |          </span><br><span class="line">|   |   Scheduler    |     |      | Controller Manager |   |          </span><br><span class="line">|   |                |     |      |                    |   |          </span><br><span class="line">|   +----------------+     v      +--------------------+   |          </span><br><span class="line">| +------------------------------------------------------+ |          </span><br><span class="line">| |                                                      | |          </span><br><span class="line">| |                Cluster state store                   | |          </span><br><span class="line">| |                                                      | |          </span><br><span class="line">| +------------------------------------------------------+ |          </span><br><span class="line">+----------------------------------------------------------+</span><br></pre></td></tr></table></figure>
+<h4 id="Cluster-state-store"><a href="#Cluster-state-store" class="headerlink" title="Cluster state store"></a>Cluster state store</h4><p>存储集群所有需持久化的状态，并且提供 watch 的功能支持，可以快速的通知各组件的变更等操作。<br>因为目前 Kubernetes 的存储层选择是 etcd ，所以一般情况下，大家都直接以 etcd 来代表集群状态存储服务。即：将所有状态存储到 etcd 实例中。</p>
+<h4 id="API-Server"><a href="#API-Server" class="headerlink" title="API Server"></a>API Server</h4><p>这是整个集群的入口，类似于人体的感官，接收外部的信号和请求，并将一些信息写入到 etcd 中。<br>实际处理逻辑比三次握手简单的多：<br>请求 API Server ：“嗨，我有些东西要放到 etcd 里面”<br>API Server 收到请求：“你是谁？我为啥要听你的”<br>从请求中，拿出自己的身份凭证（一般是证书）：“是我啊，你的master，给我把这些东西放进去”<br>这时候就要看是些什么内容了，如果这些内容 API Server 能理解，那就放入 etcd 中 “好的 master 我放进去了”；如果不能理解，“抱歉 master 我理解不了”</p>
+<p>Controller Manager<br>Controller Manager 大概是 K8S 集群中最繁忙的部分，它在后台运行着许多不同的控制器进程，用来调节集群的状态。<br>当集群的配置发生变更，控制器就会朝着预期的状态开始工作。</p>
+<p>Scheduler</p>
+<p>顾名思义，Scheduler 是集群的调度器，它会持续的关注集群中未被调度的 Pod ，并根据各种条件，比如资源的可用性，节点的亲和性或者其他的一些限制条件，通过绑定的 API 将 Pod 调度/绑定到 Node 上。</p>
+<p>Node<br>简单点理解为加入集群中的机器即可。<br>那 Node 是如何加入集群接受调度，并运行服务的呢？这都要归功于运行在 Node 上的几个核心组件。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">+--------------------------------------------------------+       </span><br><span class="line">| +---------------------+        +---------------------+ |       </span><br><span class="line">| |      kubelet        |        |     kube-proxy      | |       </span><br><span class="line">| |                     |        |                     | |       </span><br><span class="line">| +---------------------+        +---------------------+ |       </span><br><span class="line">| +----------------------------------------------------+ |       </span><br><span class="line">| | Container Runtime (Docker)                         | |       </span><br><span class="line">| | +---------------------+    +---------------------+ | |       </span><br><span class="line">| | |Pod                  |    |Pod                  | | |       </span><br><span class="line">| | | +-----+ +-----+     |    |+-----++-----++-----+| | |       </span><br><span class="line">| | | |C1   | |C2   |     |    ||C1   ||C2   ||C3   || | |       </span><br><span class="line">| | | |     | |     |     |    ||     ||     ||     || | |       </span><br><span class="line">| | | +-----+ +-----+     |    |+-----++-----++-----+| | |       </span><br><span class="line">| | +---------------------+    +---------------------+ | |       </span><br><span class="line">| +----------------------------------------------------+ |       </span><br><span class="line">+--------------------------------------------------------+</span><br></pre></td></tr></table></figure></p>
+<p>Kubelet<br>Kubelet 实现了集群中最重要的关于 Node 和 Pod 的控制功能，如果没有 Kubelet 的存在，那 Kubernetes 很可能就只是一个纯粹的通过 API Server CRUD 的应用程序。<br>在前面，我们提到了 Master 节点的 Scheduler 组件，它会调度未绑定的 Pod 到符合条件的 Node 上，而至于最终该 Pod 是否能运行于 Node 上，则是由 Kubelet 来裁定的。</p>
+<h3 id="删除所有容器"><a href="#删除所有容器" class="headerlink" title="删除所有容器"></a>删除所有容器</h3><p>sudo docker rm <code>sudo docker ps -a -q</code>  //-a 表示列出所有容器， -q表示只需要返回容器id</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2019/01/02/k8s/" data-id="cjtzjcsop000lcsx89nzd9wmf" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/k8s/">k8s</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/02/quick-sort/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          快速排序
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2018/12/17/redis-bloom/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">redis 布隆过滤器</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/golang/">golang</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/http/">http</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/redis/lock/">lock</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tcp/">tcp</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bloom-filter/">bloom filter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grpc/">grpc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hyperloglog/">hyperloglog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/micro-service/">micro-service</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rpc/">rpc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/algorithms/" style="font-size: 15px;">algorithms</a> <a href="/tags/bloom-filter/" style="font-size: 10px;">bloom filter</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/grpc/" style="font-size: 10px;">grpc</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/hyperloglog/" style="font-size: 10px;">hyperloglog</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/micro-service/" style="font-size: 10px;">micro-service</a> <a href="/tags/redis/" style="font-size: 20px;">redis</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 15px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/02/simple-question/">simple-question</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/02/sample/">蓄水池采样算法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/05/golang-questions/">golang-集锦</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/02/dijkstra/">dijkstra(最短路算法)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/02/rpc/">rpc简述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

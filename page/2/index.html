@@ -62,6 +62,57 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-redis-lock" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/16/redis-lock/" class="article-date">
+  <time datetime="2018-12-16T14:13:22.000Z" itemprop="datePublished">2018-12-16</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>►<a class="article-category-link" href="/categories/redis/lock/">lock</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/16/redis-lock/">分布式锁</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>分布式锁本质上要实现的目标就是在redis里面占一个坑，当别的进程也要来占时，发现已经有人先到了，就只好放弃或者稍后再试。</p>
+<p>占坑一般是用setnx，只允许一个客户端占。先来先占，用完了，再del释放。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;set lock:userxxx true ex 5 nx</span><br><span class="line">OK</span><br><span class="line">//<span class="keyword">do</span> something</span><br><span class="line">....</span><br><span class="line">&gt;del <span class="keyword">lock</span>:userxxx</span><br></pre></td></tr></table></figure>
+<p>超时问题。如果在加锁和释文锁之间逻辑执行的太长，以至于超出了锁的超时限制，就会出现问题。因为锁过期了，第二个线程重新持有了这把锁，但是紧接着第一个线程执行完了业务逻辑，就把锁释放了，第三个线程就会在第二个线程逻辑执行完之间拿到锁。</p>
+<p>解决方案：</p>
+<ul>
+<li>换zk，用心跳解决</li>
+<li>为set指令的value参数设置为一个随机数，释放时先匹配随机数是否一致，然后再删除key</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/12/16/redis-lock/" data-id="cjtzjcsp00010csx8cpekm329" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-redis" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/16/redis/" class="article-date">
@@ -162,7 +213,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/16/redis/" data-id="cjtzixkli001l74x8dz66cyhb" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/16/redis/" data-id="cjtzjcsox000ucsx8ddkp3zoo" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
@@ -216,10 +267,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/02/micro-service/" data-id="cjtzixkke000c74x8jgl3w0ro" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/02/micro-service/" data-id="cjtzjcsos000ncsx81qc2loyj" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zk/">zk</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/micro-service/">micro-service</a></li></ul>
 
     </footer>
   </div>
@@ -281,7 +332,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/11/02/goroutine-scheduler/" data-id="cjtzixkka000774x8jzpax88j" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/11/02/goroutine-scheduler/" data-id="cjtzjcsoe000bcsx8765ip23k" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
@@ -323,7 +374,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cjtzixklh001i74x8ayztiss4" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cjtzjcsp8001ccsx8aalbcwtl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
@@ -439,7 +490,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/http/" data-id="cjtzixkk8000674x8s3flqmw6" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/http/" data-id="cjtzjcsoi000fcsx8dd78s3mi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/">https</a></li></ul>
@@ -498,7 +549,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtzixkle001e74x89esmugj8" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtzjcsp9001gcsx80wp4mlt9" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li></ul>
@@ -620,7 +671,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-udp/" data-id="cjtzixklj001n74x8oy05e62z" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-udp/" data-id="cjtzjcspa001hcsx8be8ld8dk" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/udp/">udp</a></li></ul>
@@ -647,7 +698,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/golang/">golang</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/http/">http</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/redis/lock/">lock</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tcp/">tcp</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/golang/">golang</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/http/">http</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/k8s/">k8s</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/redis/lock/">lock</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tcp/">tcp</a></li></ul>
     </div>
   </div>
 
@@ -657,7 +708,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bloom-filter/">bloom filter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grpc/">grpc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hyperloglog/">hyperloglog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rpc/">rpc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bloom-filter/">bloom filter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grpc/">grpc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/hyperloglog/">hyperloglog</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/k8s/">k8s</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/micro-service/">micro-service</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rpc/">rpc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
     </div>
   </div>
 
@@ -667,7 +718,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/algorithms/" style="font-size: 15px;">algorithms</a> <a href="/tags/bloom-filter/" style="font-size: 10px;">bloom filter</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/grpc/" style="font-size: 10px;">grpc</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/hyperloglog/" style="font-size: 10px;">hyperloglog</a> <a href="/tags/redis/" style="font-size: 20px;">redis</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 15px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/algorithms/" style="font-size: 15px;">algorithms</a> <a href="/tags/bloom-filter/" style="font-size: 10px;">bloom filter</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/grpc/" style="font-size: 10px;">grpc</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/hyperloglog/" style="font-size: 10px;">hyperloglog</a> <a href="/tags/k8s/" style="font-size: 10px;">k8s</a> <a href="/tags/micro-service/" style="font-size: 10px;">micro-service</a> <a href="/tags/redis/" style="font-size: 20px;">redis</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 15px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
