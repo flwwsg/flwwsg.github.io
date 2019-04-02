@@ -139,10 +139,106 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2019/01/05/golang-questions/" data-id="cjtzfihh7000914x8brtg1obl" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2019/01/05/golang-questions/" data-id="cjtzgskvg000apwx8vkdx3syi" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-micro-service" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/02/micro-service/" class="article-date">
+  <time datetime="2018-12-02T13:30:43.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/02/micro-service/">微服务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h3><p>服务发现有三个角色，服务提供者、服务消费者和服务中介。</p>
+<p>服务中介是联系服务提供者和服务消费者的桥梁。服务提供者将自己提供的服务地址注册到服务中介，服务消费者从服务中介那里查找自己想要的服务的地址，然后享受这个服务。服务中介提供多个服务，每个服务对应多个服务提供者。</p>
+<h3 id="配置中心怎么做服务发现"><a href="#配置中心怎么做服务发现" class="headerlink" title="配置中心怎么做服务发现"></a>配置中心怎么做服务发现</h3><p>Push 的经典实现有两种:</p>
+<ul>
+<li>基于 socket 长连接的 notify，典型的实现如 zookeeper</li>
+<li>另一种为 HTTP 连接所使用 Long Polling。<br>但是基于 socket 长连接的 notify 和基于 HTTP 协议的 Long Polling 都会存在notify消息丢失的问题。所以通过 Pull 的方式定时轮询也必不可少，时间间隔的选择也很关键，频率越高服务注册中心所承受的压力也越大。需要结合服务端的性能和业务的规模进行权衡。</li>
+</ul>
+<p>zk: 服务实例注册的 Node 类型是 ephemeral/ɪˈfɛmərəl/ node，这种类型的节点只有在客户端保持着连接的时候才有效。所以当某个服务实例被停止或者出现网络异常的时候，对应的节点也会被删掉。因此，任何时候从 ZooKeeper 里查询到的都是当前活跃的实例。借助 ZooKeeper 的推送功能，服务的消费者可以得知实例的变化，从而可以从容应对服务实例的宕机和新实例的添加，无需重启</p>
+<p>etcd: 需要搭配一些第三方工具才可以提供服务发现功能。如Registrator，Confd</p>
+<p>Consul：与Zookeeper和etcd不一样，Consul内嵌实现了服务发现系统，还包括节点健康检查和运行在其上的服务。</p>
+<h3 id="failover"><a href="#failover" class="headerlink" title="failover"></a>failover</h3><ul>
+<li>绝大多数的服务注册中心都提供了健康检查功能，在应用停止后会自动摘除服务所对应的节点。</li>
+<li>更优雅的方式，先将即将停止的应用所对应的权重调成 0，此时上游将不再调用此应用。这时候的停止应用的操作对服务订阅者完全没有影响</li>
+</ul>
+<h3 id="服务的健康检查"><a href="#服务的健康检查" class="headerlink" title="服务的健康检查"></a>服务的健康检查</h3><p>客户端心跳和服务端主动探测,如zk依赖了组件本身提供的临时节点的特性，通过 ZooKeeper 连接的 session 来维持临时节点。</p>
+<h3 id="serverless"><a href="#serverless" class="headerlink" title="serverless"></a>serverless</h3><p>Serveless,通常包含了两个领域BaaS（Backend as a Service）和FaaS（Function as a Service）,是继 docker 与容器编排之后的又一次应用开发与基础设施提供方之间的边界划分，大体是云服务的未来，把蛋糕从企业的IT、运维与中间件部门切走，形成规模效应，做得越多赚得越多；公司内的话 servless 能够帮助加速前台业务迭代，未来可能会有比 servless 更适合中后台的架构</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/12/02/micro-service/" data-id="cjtzgskvc0006pwx8ttwu8i90" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zk/">zk</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-sql" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/02/sql/" class="article-date">
+  <time datetime="2018-11-02T13:04:14.000Z" itemprop="datePublished">2018-11-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/02/sql/">sql-集锦</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="MySQL-的聚簇索引和非聚簇索引有什么区别"><a href="#MySQL-的聚簇索引和非聚簇索引有什么区别" class="headerlink" title="MySQL 的聚簇索引和非聚簇索引有什么区别"></a>MySQL 的聚簇索引和非聚簇索引有什么区别</h3><p>聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针</p>
+<h3 id="查-A-in-AND-B-in-时-MySQL-是怎么利用索引的"><a href="#查-A-in-AND-B-in-时-MySQL-是怎么利用索引的" class="headerlink" title="查 A in () AND B in () 时, MySQL 是怎么利用索引的"></a>查 A in () AND B in () 时, MySQL 是怎么利用索引的</h3><p>先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选</p>
+<h3 id="为什么选MySQL-的InnoDB引擎"><a href="#为什么选MySQL-的InnoDB引擎" class="headerlink" title="为什么选MySQL 的InnoDB引擎"></a>为什么选MySQL 的InnoDB引擎</h3><p>几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC</p>
+<h4 id="分库分表后怎么查询分页？"><a href="#分库分表后怎么查询分页？" class="headerlink" title="分库分表后怎么查询分页？"></a>分库分表后怎么查询分页？</h4><p>每张表查 N 条数据由 client 或 proxy merge</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cjtzgskvz000mpwx8fknaurmg" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
 
     </footer>
   </div>
@@ -228,7 +324,7 @@
 <h3 id="HTTPS-和-HTTP-有什么区别"><a href="#HTTPS-和-HTTP-有什么区别" class="headerlink" title="HTTPS 和 HTTP 有什么区别"></a>HTTPS 和 HTTP 有什么区别</h3><table>
 <thead>
 <tr>
-<th>项目</th>
+<th>-</th>
 <th>https</th>
 <th>http</th>
 </tr>
@@ -255,7 +351,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/http/" data-id="cjtzfihhg000d14x8op88bxry" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/http/" data-id="cjtzgskw2000opwx8wkrqtjfd" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/">https</a></li></ul>
@@ -314,7 +410,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtzfihhe000c14x8j9ay34j8" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtzgskw4000qpwx8fsz9jqqh" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li></ul>
@@ -436,7 +532,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-udp/" data-id="cjtzfihhj000e14x8okleq4nn" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-udp/" data-id="cjtzgskw6000spwx8xxurys8v" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/udp/">udp</a></li></ul>
@@ -501,7 +597,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/02/goroutine-scheduler/" data-id="cjtzfihh2000814x8m31oj4c0" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/02/goroutine-scheduler/" data-id="cjtzgskvf0009pwx8jmpzmeun" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
@@ -533,7 +629,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
     </div>
   </div>
 
@@ -543,7 +639,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -552,7 +648,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
     </div>
   </div>
 
@@ -569,19 +665,19 @@
           </li>
         
           <li>
+            <a href="/2018/12/02/micro-service/">微服务</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/sql/">sql-集锦</a>
+          </li>
+        
+          <li>
             <a href="/2018/09/05/http/">http</a>
           </li>
         
           <li>
             <a href="/2018/09/05/tcp-handshake/">TCP三次握手、四次挥手的过程</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/05/tcp-udp/">tcp-udp</a>
-          </li>
-        
-          <li>
-            <a href="/2018/09/02/goroutine-scheduler/">goroutine-调度</a>
           </li>
         
       </ul>
