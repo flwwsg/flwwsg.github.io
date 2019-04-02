@@ -5,16 +5,16 @@
   
 
   
-  <title>goroutine-调度 | Hexo</title>
+  <title>goroutine-调度 | Flwwsg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="G, P, M G: 表示goroutine，存储了goroutine的执行stack信息、goroutine状态以及goroutine的任务函数等；另外G对象是可以重用的。 P: 表示逻辑processor，P的数量决定了系统内最大可并行的G的数量（前提：系统的物理cpu核数&amp;gt;=P的数量）；P的最大作用还是其拥有的各种G对象队列、链表、一些cache和状态。 M: M代表着真正的执行计算资">
 <meta name="keywords" content="golang">
 <meta property="og:type" content="article">
 <meta property="og:title" content="goroutine-调度">
 <meta property="og:url" content="http://flwwsg.github.io/2018/11/02/goroutine-scheduler/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Flwwsg">
 <meta property="og:description" content="G, P, M G: 表示goroutine，存储了goroutine的执行stack信息、goroutine状态以及goroutine的任务函数等；另外G对象是可以重用的。 P: 表示逻辑processor，P的数量决定了系统内最大可并行的G的数量（前提：系统的物理cpu核数&amp;gt;=P的数量）；P的最大作用还是其拥有的各种G对象队列、链表、一些cache和状态。 M: M代表着真正的执行计算资">
-<meta property="og:locale" content="default">
+<meta property="og:locale" content="zh">
 <meta property="og:image" content="http://flwwsg.github.io/images/goroutine-scheduler-model.png">
 <meta property="og:updated_time" content="2019-04-02T07:40:37.936Z">
 <meta name="twitter:card" content="summary">
@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="G, P, M G: 表示goroutine，存储了goroutine的执行stack信息、goroutine状态以及goroutine的任务函数等；另外G对象是可以重用的。 P: 表示逻辑processor，P的数量决定了系统内最大可并行的G的数量（前提：系统的物理cpu核数&amp;gt;=P的数量）；P的最大作用还是其拥有的各种G对象队列、链表、一些cache和状态。 M: M代表着真正的执行计算资">
 <meta name="twitter:image" content="http://flwwsg.github.io/images/goroutine-scheduler-model.png">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Flwwsg" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -41,7 +41,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">Flwwsg</a>
       </h1>
       
     </div>
@@ -232,7 +232,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2019 wdj<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

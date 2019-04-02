@@ -5,22 +5,22 @@
   
 
   
-  <title>分布式锁 | Hexo</title>
+  <title>分布式锁 | Flwwsg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="分布式锁本质上要实现的目标就是在redis里面占一个坑，当别的进程也要来占时，发现已经有人先到了，就只好放弃或者稍后再试。 占坑一般是用setnx，只允许一个客户端占。先来先占，用完了，再del释放。 12345&amp;gt;set lock:userxxx true ex 5 nxOK//do something....&amp;gt;del lock:userxxx 超时问题。如果在加锁和释文锁之间逻辑执行">
 <meta name="keywords" content="redis">
 <meta property="og:type" content="article">
 <meta property="og:title" content="分布式锁">
 <meta property="og:url" content="http://flwwsg.github.io/2018/12/16/redis-lock/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Flwwsg">
 <meta property="og:description" content="分布式锁本质上要实现的目标就是在redis里面占一个坑，当别的进程也要来占时，发现已经有人先到了，就只好放弃或者稍后再试。 占坑一般是用setnx，只允许一个客户端占。先来先占，用完了，再del释放。 12345&amp;gt;set lock:userxxx true ex 5 nxOK//do something....&amp;gt;del lock:userxxx 超时问题。如果在加锁和释文锁之间逻辑执行">
-<meta property="og:locale" content="default">
+<meta property="og:locale" content="zh">
 <meta property="og:updated_time" content="2019-04-02T08:19:40.217Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="分布式锁">
 <meta name="twitter:description" content="分布式锁本质上要实现的目标就是在redis里面占一个坑，当别的进程也要来占时，发现已经有人先到了，就只好放弃或者稍后再试。 占坑一般是用setnx，只允许一个客户端占。先来先占，用完了，再del释放。 12345&amp;gt;set lock:userxxx true ex 5 nxOK//do something....&amp;gt;del lock:userxxx 超时问题。如果在加锁和释文锁之间逻辑执行">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Flwwsg" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -39,7 +39,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">Flwwsg</a>
       </h1>
       
     </div>
@@ -216,7 +216,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2019 wdj<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

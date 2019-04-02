@@ -5,22 +5,22 @@
   
 
   
-  <title>redis 布隆过滤器 | Hexo</title>
+  <title>redis 布隆过滤器 | Flwwsg</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="布隆过滤器可以理解为一个不怎么精确的set结构，当你使用它的contains方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判率。当布隆过滤说某个值存在时，这个值可能不存在；当它说不存在时，那就肯定不存在。   向布隆过滤器中添加key时，会使用多个hash函数对key进行hash算得一个整数索引值，然后">
 <meta name="keywords" content="redis,bloom filter">
 <meta property="og:type" content="article">
 <meta property="og:title" content="redis 布隆过滤器">
 <meta property="og:url" content="http://flwwsg.github.io/2018/12/17/redis-bloom/index.html">
-<meta property="og:site_name" content="Hexo">
+<meta property="og:site_name" content="Flwwsg">
 <meta property="og:description" content="布隆过滤器可以理解为一个不怎么精确的set结构，当你使用它的contains方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判率。当布隆过滤说某个值存在时，这个值可能不存在；当它说不存在时，那就肯定不存在。   向布隆过滤器中添加key时，会使用多个hash函数对key进行hash算得一个整数索引值，然后">
-<meta property="og:locale" content="default">
+<meta property="og:locale" content="zh">
 <meta property="og:updated_time" content="2019-04-02T08:34:36.615Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="redis 布隆过滤器">
 <meta name="twitter:description" content="布隆过滤器可以理解为一个不怎么精确的set结构，当你使用它的contains方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判率。当布隆过滤说某个值存在时，这个值可能不存在；当它说不存在时，那就肯定不存在。   向布隆过滤器中添加key时，会使用多个hash函数对key进行hash算得一个整数索引值，然后">
   
-    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+    <link rel="alternate" href="/atom.xml" title="Flwwsg" type="application/atom+xml">
   
   
     <link rel="icon" href="/favicon.png">
@@ -39,7 +39,7 @@
   <div id="header-outer" class="outer">
     <div id="header-title" class="inner">
       <h1 id="logo-wrap">
-        <a href="/" id="logo">Hexo</a>
+        <a href="/" id="logo">Flwwsg</a>
       </h1>
       
     </div>
@@ -211,7 +211,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2019 John Doe<br>
+      &copy; 2019 wdj<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
