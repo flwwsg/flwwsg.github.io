@@ -88,13 +88,13 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="goroutine-调度"><a href="#goroutine-调度" class="headerlink" title="goroutine 调度"></a>goroutine 调度</h1><h2 id="G-P-M"><a href="#G-P-M" class="headerlink" title="G, P, M"></a>G, P, M</h2><ul>
+        <h2 id="G-P-M"><a href="#G-P-M" class="headerlink" title="G, P, M"></a>G, P, M</h2><ul>
 <li>G: 表示goroutine，存储了goroutine的执行stack信息、goroutine状态以及goroutine的任务函数等；另外G对象是可以重用的。</li>
 <li>P: 表示逻辑processor，P的数量决定了系统内最大可并行的G的数量（前提：系统的物理cpu核数&gt;=P的数量）；P的最大作用还是其拥有的各种G对象队列、链表、一些cache和状态。</li>
 <li>M: M代表着真正的执行计算资源。在绑定有效的p后，进入schedule循环；而schedule循环的机制大致是从各种队列、p的本地队列中获取G，切换到G的执行栈上并执行G的函数，调用goexit做清理工作并回到m，如此反复。M并不保留G状态，这是G可以跨M调度的基础。</li>
 </ul>
 <blockquote>
-<p><img src="goroutine-scheduler-model.png" alt="演示图"></p>
+<p><img src="/images/goroutine-scheduler-model.png" alt></p>
 </blockquote>
 <p>P是一个“逻辑Proccessor”，每个G要想真正运行起来，首先需要被分配一个P（进入到P的local runq中，这里暂忽略global runq那个环节）。对于G来说，P就是运行它的“CPU”，可以说：G的眼里只有P。但从Go scheduler视角来看，真正的“CPU”是M，只有将P和M绑定才能让P的runq中G得以真实运行起来。这样的P与M的关系，就好比Linux操作系统调度层面用户线程(user thread)与核心线程(kernel thread)的对应关系那样(N x M)。</p>
 <p>和操作系统按时间片调度线程不同，Go并没有时间片的概念。如果某个G没有进行system call调用、没有进行I/O操作、没有阻塞在一个channel操作上，那么m是如何让G停下来并调度下一个runnable G的呢？答案是：G是被抢占调度的。</p>
@@ -115,7 +115,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/06/02/goroutine-scheduler/" data-id="cjtzah3nv0000h4x8q96fhi1f" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/06/02/goroutine-scheduler/" data-id="cjtzazti2000fcox8mrnceqa4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
