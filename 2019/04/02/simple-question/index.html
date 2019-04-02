@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>simple-question | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100123456789101112131415161718192021222324252627//启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100func Prin">
+<meta property="og:type" content="article">
+<meta property="og:title" content="simple-question">
+<meta property="og:url" content="http://flwwsg.github.io/2019/04/02/simple-question/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100123456789101112131415161718192021222324252627//启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100func Prin">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://flwwsg.github.io/images/mn.gif">
+<meta property="og:updated_time" content="2019-04-02T07:56:35.015Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="simple-question">
+<meta name="twitter:description" content="启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100123456789101112131415161718192021222324252627//启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100func Prin">
+<meta name="twitter:image" content="http://flwwsg.github.io/images/mn.gif">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://flwwsg.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-simple-question" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/02/simple-question/" class="article-date">
+  <time datetime="2019-04-02T07:54:32.000Z" itemprop="datePublished">2019-04-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      simple-question
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="启动两个线程-一个输出-1-3-5-7…99-另一个输出-2-4-6-8…100-最后-STDOUT-中按序输出-1-2-3-4-5…100"><a href="#启动两个线程-一个输出-1-3-5-7…99-另一个输出-2-4-6-8…100-最后-STDOUT-中按序输出-1-2-3-4-5…100" class="headerlink" title="启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100"></a>启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PrintIntInTwoThread</span><span class="params">()</span></span> &#123;</span><br><span class="line">	num := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	exit := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="number">101</span>; i++ &#123;</span><br><span class="line">			<span class="comment">//打印奇数</span></span><br><span class="line">			<span class="built_in">println</span>(<span class="string">"g1:"</span>, &lt;-num)</span><br><span class="line">			i++</span><br><span class="line">			num &lt;- i</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			<span class="built_in">close</span>(num)</span><br><span class="line">			<span class="built_in">close</span>(exit)</span><br><span class="line">		&#125;()</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">100</span>; i++ &#123;</span><br><span class="line">			i++</span><br><span class="line">			num &lt;- i</span><br><span class="line">			<span class="built_in">println</span>(<span class="string">"g2:"</span>, &lt;-num)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;()</span><br><span class="line">	&lt;-exit</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="如何判断两个无环单链表有没有交叉点"><a href="#如何判断两个无环单链表有没有交叉点" class="headerlink" title="如何判断两个无环单链表有没有交叉点"></a>如何判断两个无环单链表有没有交叉点</h3><p>两个无环单链表如果尾结点相同，则必相交</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">is_intersect</span><span class="params">(<span class="keyword">node_t</span> *a, <span class="keyword">node_t</span> *b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!a || !b) <span class="keyword">return</span> <span class="number">-1</span>; <span class="comment">//a or b is NULL</span></span><br><span class="line">	<span class="keyword">for</span> (; a-&gt;next; a = a-&gt;next); </span><br><span class="line">	<span class="keyword">for</span> (; b-&gt;next; b = b-&gt;next); </span><br><span class="line">	<span class="keyword">return</span> a == b?<span class="number">1</span>:<span class="number">0</span>; <span class="comment">//return 1 for yes, 0 for no</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="如何判断两个有环单链表有没有交叉点"><a href="#如何判断两个有环单链表有没有交叉点" class="headerlink" title="如何判断两个有环单链表有没有交叉点"></a>如何判断两个有环单链表有没有交叉点</h3><p>如果有环且两个链表相交，则两个链表都有共同一个环，即环上的任意一个节点都存在于两个链表上。因此，通过环上任意一点在不在另一条链表上,可以判断有没有交叉点。</p>
+<h3 id="如何判断一个单链表有没有环-并找出入环点"><a href="#如何判断一个单链表有没有环-并找出入环点" class="headerlink" title="如何判断一个单链表有没有环, 并找出入环点"></a>如何判断一个单链表有没有环, 并找出入环点</h3><p>如果一个链表有环, 那么它肯定只有一个环。设两个指针p, q, 初始化指向头.p以步长2的速度向前跑, q的步长是1.这样, 如果链表不存在环, p和q肯定不会相遇.如果存在环, p和q一定会相遇</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">any_ring</span><span class="params">(<span class="keyword">node_t</span> *head)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">node_t</span> *p, *q; </span><br><span class="line">	<span class="keyword">for</span> (p = q = head; p; p = p-&gt;next, q = q-&gt;next)&#123;</span><br><span class="line">		p = p-&gt;next; </span><br><span class="line">		<span class="keyword">if</span> (!p) <span class="keyword">break</span>; </span><br><span class="line">		<span class="keyword">if</span> (p == q) <span class="keyword">return</span> <span class="number">1</span>; <span class="comment">//yes</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>; <span class="comment">//fail find</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>入环点</p>
+<ul>
+<li><p>不考虑其中潜在的规律，就按照一般的方法，创建一个list，把扫描过的节点都存储在list中，知道下一个节点在list中已经存在，那就说明该节点就是入口节点要</p>
+</li>
+<li><p>初始化三个指针p, q, r全部指向head. 然后p以2的速度行进, q以1的速度行进.当p和q相遇的时候, 发出r指针并以1的速度行进, 当p和r相遇返回这个结点.复杂度O(n)</p>
+</li>
+</ul>
+<p>设环的长度为n， head到入环点的距离为t， p、q第一次相遇时，p走的路程为x，入环点到相遇点的距离为d， 则q的路程为2x， 且x+n= 2x, x=t+d。所以n=t+d。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">node_t</span> *find_entry(<span class="keyword">node_t</span> *head)&#123;</span><br><span class="line">	<span class="keyword">node_t</span> *p, *q, *r;</span><br><span class="line">	<span class="keyword">for</span> (p = q = head; p; p = p -&gt; next, q = q -&gt; next)&#123;</span><br><span class="line">		p = p -&gt; next;</span><br><span class="line">		<span class="keyword">if</span>(!p) <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">if</span> (p==q) <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (!p) <span class="keyword">return</span> <span class="number">0</span> ; <span class="comment">//没有环</span></span><br><span class="line">	<span class="keyword">for</span>( r= head,, q= q-&gt;; q != r; r = r-&gt;next; q = q-&gt;nex);</span><br><span class="line">	<span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="M-N-横向递增矩阵找指定数"><a href="#M-N-横向递增矩阵找指定数" class="headerlink" title="M*N 横向递增矩阵找指定数"></a>M*N 横向递增矩阵找指定数</h3><p>定位法<br>首先直接定位到最右上角的元素，再配以二分查找，比要找的数（6）大就往左走，比要找数（6）的小就往下走，直到找到要找的数字（6）为止，这个方法的时间复杂度O（m+n）。如下图示：</p>
+<blockquote>
+<p><img src="/images/mn.gif" alt></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ROW 4</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> COL 4</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">YoungMatrix</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[][COL], <span class="keyword">int</span> searchKey)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = COL <span class="number">-1</span>;</span><br><span class="line">	<span class="keyword">int</span> var = <span class="built_in">array</span>[i][j];</span><br><span class="line">	<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (var == searchKey)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (var &lt; searchKey &amp;&amp; i &lt; ROW - <span class="number">1</span>)</span><br><span class="line">			var = <span class="built_in">array</span>[++i][j];</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (var &gt; searchKey &amp;&amp; j &gt; <span class="number">0</span>)</span><br><span class="line">			var = <span class="built_in">array</span>[i][--j];</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span>  <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="B-树和二叉树有什么区别和优劣"><a href="#B-树和二叉树有什么区别和优劣" class="headerlink" title="B+树和二叉树有什么区别和优劣"></a>B+树和二叉树有什么区别和优劣</h3><p>B+树是多叉树，深度更小，B+树可以对叶子节点进行顺序遍历，B+树能够更好地利用磁盘扇区；二叉树：实现简单。本质上每一个红黑树也是一个特化的二叉查找树。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2019/04/02/simple-question/" data-id="cjtzhuvwb000jagx8xxpmxuvd" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2019/03/02/sample/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">蓄水池采样算法</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/golang/">golang</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/http/">http</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/tcp/">tcp</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/algorithms/" style="font-size: 20px;">algorithms</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/02/simple-question/">simple-question</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/02/sample/">蓄水池采样算法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/05/golang-questions/">golang-集锦</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/02/dijkstra/">dijkstra(最短路算法)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/02/quick-sort/">快速排序</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>

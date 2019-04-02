@@ -62,6 +62,113 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-simple-question" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/04/02/simple-question/" class="article-date">
+  <time datetime="2019-04-02T07:54:32.000Z" itemprop="datePublished">2019-04-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/04/02/simple-question/">simple-question</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="启动两个线程-一个输出-1-3-5-7…99-另一个输出-2-4-6-8…100-最后-STDOUT-中按序输出-1-2-3-4-5…100"><a href="#启动两个线程-一个输出-1-3-5-7…99-另一个输出-2-4-6-8…100-最后-STDOUT-中按序输出-1-2-3-4-5…100" class="headerlink" title="启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100"></a>启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PrintIntInTwoThread</span><span class="params">()</span></span> &#123;</span><br><span class="line">	num := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	exit := <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>)</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">1</span>; i &lt; <span class="number">101</span>; i++ &#123;</span><br><span class="line">			<span class="comment">//打印奇数</span></span><br><span class="line">			<span class="built_in">println</span>(<span class="string">"g1:"</span>, &lt;-num)</span><br><span class="line">			i++</span><br><span class="line">			num &lt;- i</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">			<span class="built_in">close</span>(num)</span><br><span class="line">			<span class="built_in">close</span>(exit)</span><br><span class="line">		&#125;()</span><br><span class="line">		<span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">100</span>; i++ &#123;</span><br><span class="line">			i++</span><br><span class="line">			num &lt;- i</span><br><span class="line">			<span class="built_in">println</span>(<span class="string">"g2:"</span>, &lt;-num)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125;()</span><br><span class="line">	&lt;-exit</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="如何判断两个无环单链表有没有交叉点"><a href="#如何判断两个无环单链表有没有交叉点" class="headerlink" title="如何判断两个无环单链表有没有交叉点"></a>如何判断两个无环单链表有没有交叉点</h3><p>两个无环单链表如果尾结点相同，则必相交</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">is_intersect</span><span class="params">(<span class="keyword">node_t</span> *a, <span class="keyword">node_t</span> *b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">if</span> (!a || !b) <span class="keyword">return</span> <span class="number">-1</span>; <span class="comment">//a or b is NULL</span></span><br><span class="line">	<span class="keyword">for</span> (; a-&gt;next; a = a-&gt;next); </span><br><span class="line">	<span class="keyword">for</span> (; b-&gt;next; b = b-&gt;next); </span><br><span class="line">	<span class="keyword">return</span> a == b?<span class="number">1</span>:<span class="number">0</span>; <span class="comment">//return 1 for yes, 0 for no</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="如何判断两个有环单链表有没有交叉点"><a href="#如何判断两个有环单链表有没有交叉点" class="headerlink" title="如何判断两个有环单链表有没有交叉点"></a>如何判断两个有环单链表有没有交叉点</h3><p>如果有环且两个链表相交，则两个链表都有共同一个环，即环上的任意一个节点都存在于两个链表上。因此，通过环上任意一点在不在另一条链表上,可以判断有没有交叉点。</p>
+<h3 id="如何判断一个单链表有没有环-并找出入环点"><a href="#如何判断一个单链表有没有环-并找出入环点" class="headerlink" title="如何判断一个单链表有没有环, 并找出入环点"></a>如何判断一个单链表有没有环, 并找出入环点</h3><p>如果一个链表有环, 那么它肯定只有一个环。设两个指针p, q, 初始化指向头.p以步长2的速度向前跑, q的步长是1.这样, 如果链表不存在环, p和q肯定不会相遇.如果存在环, p和q一定会相遇</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">any_ring</span><span class="params">(<span class="keyword">node_t</span> *head)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">node_t</span> *p, *q; </span><br><span class="line">	<span class="keyword">for</span> (p = q = head; p; p = p-&gt;next, q = q-&gt;next)&#123;</span><br><span class="line">		p = p-&gt;next; </span><br><span class="line">		<span class="keyword">if</span> (!p) <span class="keyword">break</span>; </span><br><span class="line">		<span class="keyword">if</span> (p == q) <span class="keyword">return</span> <span class="number">1</span>; <span class="comment">//yes</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>; <span class="comment">//fail find</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>入环点</p>
+<ul>
+<li><p>不考虑其中潜在的规律，就按照一般的方法，创建一个list，把扫描过的节点都存储在list中，知道下一个节点在list中已经存在，那就说明该节点就是入口节点要</p>
+</li>
+<li><p>初始化三个指针p, q, r全部指向head. 然后p以2的速度行进, q以1的速度行进.当p和q相遇的时候, 发出r指针并以1的速度行进, 当p和r相遇返回这个结点.复杂度O(n)</p>
+</li>
+</ul>
+<p>设环的长度为n， head到入环点的距离为t， p、q第一次相遇时，p走的路程为x，入环点到相遇点的距离为d， 则q的路程为2x， 且x+n= 2x, x=t+d。所以n=t+d。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">node_t</span> *find_entry(<span class="keyword">node_t</span> *head)&#123;</span><br><span class="line">	<span class="keyword">node_t</span> *p, *q, *r;</span><br><span class="line">	<span class="keyword">for</span> (p = q = head; p; p = p -&gt; next, q = q -&gt; next)&#123;</span><br><span class="line">		p = p -&gt; next;</span><br><span class="line">		<span class="keyword">if</span>(!p) <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">if</span> (p==q) <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (!p) <span class="keyword">return</span> <span class="number">0</span> ; <span class="comment">//没有环</span></span><br><span class="line">	<span class="keyword">for</span>( r= head,, q= q-&gt;; q != r; r = r-&gt;next; q = q-&gt;nex);</span><br><span class="line">	<span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="M-N-横向递增矩阵找指定数"><a href="#M-N-横向递增矩阵找指定数" class="headerlink" title="M*N 横向递增矩阵找指定数"></a>M*N 横向递增矩阵找指定数</h3><p>定位法<br>首先直接定位到最右上角的元素，再配以二分查找，比要找的数（6）大就往左走，比要找数（6）的小就往下走，直到找到要找的数字（6）为止，这个方法的时间复杂度O（m+n）。如下图示：</p>
+<blockquote>
+<p><img src="/images/mn.gif" alt></p>
+</blockquote>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">define</span> ROW 4</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> COL 4</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">YoungMatrix</span><span class="params">(<span class="keyword">int</span> <span class="built_in">array</span>[][COL], <span class="keyword">int</span> searchKey)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">int</span> i = <span class="number">0</span>, j = COL <span class="number">-1</span>;</span><br><span class="line">	<span class="keyword">int</span> var = <span class="built_in">array</span>[i][j];</span><br><span class="line">	<span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">		<span class="keyword">if</span> (var == searchKey)</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (var &lt; searchKey &amp;&amp; i &lt; ROW - <span class="number">1</span>)</span><br><span class="line">			var = <span class="built_in">array</span>[++i][j];</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (var &gt; searchKey &amp;&amp; j &gt; <span class="number">0</span>)</span><br><span class="line">			var = <span class="built_in">array</span>[i][--j];</span><br><span class="line">		<span class="keyword">else</span></span><br><span class="line">			<span class="keyword">return</span>  <span class="literal">false</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="B-树和二叉树有什么区别和优劣"><a href="#B-树和二叉树有什么区别和优劣" class="headerlink" title="B+树和二叉树有什么区别和优劣"></a>B+树和二叉树有什么区别和优劣</h3><p>B+树是多叉树，深度更小，B+树可以对叶子节点进行顺序遍历，B+树能够更好地利用磁盘扇区；二叉树：实现简单。本质上每一个红黑树也是一个特化的二叉查找树。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2019/04/02/simple-question/" data-id="cjtzhuvwb000jagx8xxpmxuvd" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-sample" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/03/02/sample/" class="article-date">
+  <time datetime="2019-03-02T14:47:21.000Z" itemprop="datePublished">2019-03-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/03/02/sample/">蓄水池采样算法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="从无限的字符流中-随机选出-k-个字符"><a href="#从无限的字符流中-随机选出-k-个字符" class="headerlink" title="从无限的字符流中, 随机选出 k 个字符"></a>从无限的字符流中, 随机选出 k 个字符</h3><p><a href="https://zh.wikipedia.org/zh-cn/%E6%B0%B4%E5%A1%98%E6%8A%BD%E6%A8%A3" target="_blank" rel="noopener">wiki</a> 先简单的入手， 取一个元素：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> N = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">//N 是个很大的数</span></span><br><span class="line">	list := <span class="built_in">make</span>([]<span class="keyword">int</span>, N)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">range</span> list &#123;</span><br><span class="line">		list[i] = i + <span class="number">1</span></span><br><span class="line">	&#125;</span><br><span class="line">	selected := <span class="number">0</span></span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line">	<span class="keyword">for</span> n := <span class="number">0</span>; n &lt; N; n++ &#123;</span><br><span class="line">		<span class="keyword">if</span> rand.Float32() &lt; <span class="keyword">float32</span>(<span class="number">1</span>)/<span class="keyword">float32</span>(n+<span class="number">1</span>) &#123;</span><br><span class="line">			<span class="comment">//选择当前元素</span></span><br><span class="line">			selected = list[n]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//输出结果</span></span><br><span class="line">	<span class="built_in">println</span>(selected)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在循环内第n行被抽取的机率为1/n，以 Pn表示。任意第n行被抽取的机率为</p>
+<p><img src="/images/select-one.svg" alt="推演"></p>
+<p>故此，各行被抽取的机率均相同。</p>
+<p>如果选k个</p>
+<ul>
+<li>选择前 k 个数作为 result</li>
+<li>从第 k+1 个数开始遍历数组，对于数组第 k+i（i=1,2,…..）个数，以 k/k+i 的概率选择这个数加入result并替换掉 result 中的任意一个数</li>
+<li>遍历完数组后得到的 result 即为产生的 k 个随机样本</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> N = <span class="number">100</span></span><br><span class="line"><span class="keyword">const</span> K = <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">//N 是个很大的数</span></span><br><span class="line">	list := <span class="built_in">make</span>([]<span class="keyword">int</span>, N)</span><br><span class="line">	<span class="keyword">for</span> i := <span class="keyword">range</span> list &#123;</span><br><span class="line">		list[i] = i + <span class="number">1</span></span><br><span class="line">	&#125;</span><br><span class="line">	selected := <span class="built_in">make</span>([]<span class="keyword">int</span>, K)</span><br><span class="line">	rand.Seed(time.Now().UnixNano())</span><br><span class="line">	<span class="keyword">for</span> n := <span class="number">0</span>; n &lt; N; n++ &#123;</span><br><span class="line">		<span class="keyword">if</span> n &lt; K &#123;</span><br><span class="line">			selected[n] = list[n]</span><br><span class="line">			<span class="keyword">continue</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">if</span> r := rand.Intn(n + <span class="number">1</span>); r &lt; K &#123;</span><br><span class="line">			<span class="comment">//选择当前元素</span></span><br><span class="line">			selected[r] = list[n]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//输出结果</span></span><br><span class="line">	<span class="built_in">println</span>(selected)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在循环内第n个元素被抽取的机率为k/n，以 Pn表示。总数为N时，任意第n个元素被抽取的机率为</p>
+<p><img src="/images/select-multiple.svg" alt="多选"></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2019/03/02/sample/" data-id="cjtzhuvw8000fagx8aznmgy7n" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-golang-questions" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/01/05/golang-questions/" class="article-date">
@@ -139,7 +246,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2019/01/05/golang-questions/" data-id="cjtzh81t10009ysx8n51in7z6" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2019/01/05/golang-questions/" data-id="cjtzhuvvo0007agx8ztt45b0x" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
@@ -173,9 +280,7 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <blockquote>
-<p>该算法的关键在于找一个优先队列(比如列表，二叉树)维护相关的集合。同时支持：</p>
-</blockquote>
+        <p>该算法的关键在于找一个优先队列(比如列表，二叉树)维护相关的集合。同时支持：</p>
 <ul>
 <li>insert 插入一个新值</li>
 <li>decrease-key 根据元素更新更小的key</li>
@@ -197,9 +302,11 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2019/01/02/dijkstra/" data-id="cjtzh81t00008ysx8bp9wgoad" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2019/01/02/dijkstra/" data-id="cjtzhuvvm0006agx8lksgzn3f" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithms/">algorithms</a></li></ul>
+
     </footer>
   </div>
   
@@ -236,10 +343,10 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2019/01/02/quick-sort/" data-id="cjtzh81ta000fysx8720dz5z0" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2019/01/02/quick-sort/" data-id="cjtzhuvwa000hagx8npbkggka" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/quick-sort/">quick-sort</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithms/">algorithms</a></li></ul>
 
     </footer>
   </div>
@@ -290,7 +397,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/02/micro-service/" data-id="cjtzh81tc000iysx861tzvi5v" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/02/micro-service/" data-id="cjtzhuvw4000cagx806x4jbao" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zk/">zk</a></li></ul>
@@ -355,7 +462,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/11/02/goroutine-scheduler/" data-id="cjtzh81t2000aysx85c7n4ebb" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/11/02/goroutine-scheduler/" data-id="cjtzhuvvx000bagx8khaxjlsr" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
@@ -397,7 +504,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cjtzh81t9000eysx8s1pjpqjb" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cjtzhuvwe000nagx812jns0b4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
@@ -513,7 +620,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/http/" data-id="cjtzh81t8000dysx8zl2rlsh8" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/http/" data-id="cjtzhuvvs0009agx8lb8195z1" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/">https</a></li></ul>
@@ -572,7 +679,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtzh81td000jysx80gkgzy35" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtzhuvwz0012agx8gmrf6y2e" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li></ul>
@@ -584,129 +691,12 @@
 
 
   
-    <article id="post-tcp-udp" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/05/tcp-udp/" class="article-date">
-  <time datetime="2018-09-05T14:20:10.000Z" itemprop="datePublished">2018-09-05</time>
-</a>
+
+
+  <nav id="page-nav">
     
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/05/tcp-udp/">tcp-udp</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="TCP-和-UDP-有什么区别"><a href="#TCP-和-UDP-有什么区别" class="headerlink" title="TCP 和 UDP 有什么区别"></a>TCP 和 UDP 有什么区别</h3><table>
-<thead>
-<tr>
-<th>-</th>
-<th>tcp</th>
-<th>udp</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>是否面对连接</td>
-<td>是</td>
-<td>否</td>
-</tr>
-<tr>
-<td>数据模式</td>
-<td>流模式（stream)</td>
-<td>数据报文模式(datagram)</td>
-</tr>
-<tr>
-<td>服务质量</td>
-<td>提供可靠的服务，无差错，不丢失，不重复，且按序到达</td>
-<td>尽力而为（啥也不保证）</td>
-</tr>
-<tr>
-<td>实现难度</td>
-<td>复杂，提供复杂的控制机制，包括丢包重发，流量阻塞控制，对乱序的分包进行顺序控制</td>
-<td>简单，仅具备基本错误检查和校验和</td>
-</tr>
-<tr>
-<td>客户端连接数</td>
-<td>1对1</td>
-<td>1对1, 1对多，多对多， 多对1</td>
-</tr>
-<tr>
-<td>报文头部字节数</td>
-<td>20字节</td>
-<td>8字节</td>
-</tr>
-<tr>
-<td>常用协议</td>
-<td>HTTP, HTTPs, FTP, SMTP and Telnet</td>
-<td>DNS, DHCP, TFTP, SNMP, RIP, and VoIP</td>
-</tr>
-</tbody>
-</table>
-<h3 id="建立一个-socket-连接要经过哪些步骤"><a href="#建立一个-socket-连接要经过哪些步骤" class="headerlink" title="建立一个 socket 连接要经过哪些步骤"></a>建立一个 socket 连接要经过哪些步骤</h3><h4 id="tcp-服务端"><a href="#tcp-服务端" class="headerlink" title="tcp(服务端)"></a>tcp(服务端)</h4><ul>
-<li>新建 socket() //socket.AF_INET, socket.SOCK_STREAM</li>
-<li>设置socket属性，用setsockopt()(可选)</li>
-<li>绑定IP地址、端口等信息到socket上，用函数bind()</li>
-<li>开启监听，用函数listen()</li>
-<li>接收客户端上来的连接，用函数accept()</li>
-<li>收发数据，用函数send()和recv()，或者read()和write()</li>
-<li>关闭网络连接</li>
-<li>关闭监听</li>
-</ul>
-<h4 id="tcp-客户端"><a href="#tcp-客户端" class="headerlink" title="tcp(客户端)"></a>tcp(客户端)</h4><ul>
-<li>新建 socket() //socket.AF_INET, socket.SOCK_STREAM</li>
-<li>设置socket属性，用setsockopt()(可选)</li>
-<li>绑定IP地址、端口等信息到socket上，用函数bind() (可选)</li>
-<li>设置要连接的对方的IP地址和端口等属性</li>
-<li>连接服务器，用函数connect()</li>
-<li>收发数据，用函数send()和recv()，或者read()和write()</li>
-<li>关闭网络连接</li>
-</ul>
-<h4 id="udp-服务端"><a href="#udp-服务端" class="headerlink" title="udp(服务端)"></a>udp(服务端)</h4><ul>
-<li>创建一个socket，用函数socket()</li>
-<li>设置socket属性，用函数setsockopt()(可选)</li>
-<li>绑定IP地址、端口等信息到socket上，用函数bind()</li>
-<li>循环接收数据，用函数recvfrom()</li>
-<li>关闭网络连接</li>
-</ul>
-<h4 id="udp-客户端"><a href="#udp-客户端" class="headerlink" title="udp(客户端)"></a>udp(客户端)</h4><ul>
-<li>创建一个socket，用函数socket()</li>
-<li>设置socket属性，用函数setsockopt() (可选)</li>
-<li>绑定IP地址、端口等信息到socket上，用函数bind()(可选)</li>
-<li>设置对方的IP地址和端口等属性</li>
-<li>发送数据，用函数sendto()</li>
-<li>关闭网络连接</li>
-</ul>
-<p><strong><em>go 服务端</em></strong></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handleConn</span><span class="params">(c net.Conn)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		err := c.Close()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="comment">// do something</span></span><br><span class="line">		<span class="built_in">println</span>(<span class="string">"do something"</span>)</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	sock, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">":8080"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		conn, err := sock.Accept()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">go</span> handleConn(conn)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><strong><em>go 客户端</em></strong></p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	conn, err := net.Dial(<span class="string">"tcp"</span>, <span class="string">"127.0.0.1:8080"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		err := conn.Close()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="comment">// do something</span></span><br><span class="line">	<span class="built_in">println</span>(<span class="string">"connected"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-udp/" data-id="cjtzh81tf000nysx8upz2gx2u" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/udp/">udp</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
+  </nav>
 
 </section>
         
@@ -726,7 +716,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/">quick-sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
     </div>
   </div>
 
@@ -736,7 +726,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick-sort</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/algorithms/" style="font-size: 20px;">algorithms</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -745,7 +735,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Archives</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
     </div>
   </div>
 
@@ -758,6 +748,14 @@
       <ul>
         
           <li>
+            <a href="/2019/04/02/simple-question/">simple-question</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/02/sample/">蓄水池采样算法</a>
+          </li>
+        
+          <li>
             <a href="/2019/01/05/golang-questions/">golang-集锦</a>
           </li>
         
@@ -767,14 +765,6 @@
         
           <li>
             <a href="/2019/01/02/quick-sort/">快速排序</a>
-          </li>
-        
-          <li>
-            <a href="/2018/12/02/micro-service/">微服务</a>
-          </li>
-        
-          <li>
-            <a href="/2018/11/02/goroutine-scheduler/">goroutine-调度</a>
           </li>
         
       </ul>
