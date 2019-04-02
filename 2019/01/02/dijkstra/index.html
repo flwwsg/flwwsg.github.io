@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>dijkstra(最短路算法) | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="该算法的关键在于找一个优先队列(比如列表，二叉树)维护相关的集合。同时支持：   insert 插入一个新值 decrease-key 根据元素更新更小的key delete-min 从集合移除最小的key make-queue 根据优先级生成队列  图用邻接矩阵a[][]存储，a[i][j]代表节点i到节点j的距离， a[i][j]== MAX_VALUE &amp;gt;&amp;gt; 1 则说明节点i和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="dijkstra(最短路算法)">
+<meta property="og:url" content="http://flwwsg.github.io/2019/01/02/dijkstra/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="该算法的关键在于找一个优先队列(比如列表，二叉树)维护相关的集合。同时支持：   insert 插入一个新值 decrease-key 根据元素更新更小的key delete-min 从集合移除最小的key make-queue 根据优先级生成队列  图用邻接矩阵a[][]存储，a[i][j]代表节点i到节点j的距离， a[i][j]== MAX_VALUE &amp;gt;&amp;gt; 1 则说明节点i和">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://flwwsg.github.io/images/min-path.svg">
+<meta property="og:updated_time" content="2019-04-02T07:43:56.989Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="dijkstra(最短路算法)">
+<meta name="twitter:description" content="该算法的关键在于找一个优先队列(比如列表，二叉树)维护相关的集合。同时支持：   insert 插入一个新值 decrease-key 根据元素更新更小的key delete-min 从集合移除最小的key make-queue 根据优先级生成队列  图用邻接矩阵a[][]存储，a[i][j]代表节点i到节点j的距离， a[i][j]== MAX_VALUE &amp;gt;&amp;gt; 1 则说明节点i和">
+<meta name="twitter:image" content="http://flwwsg.github.io/images/min-path.svg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://flwwsg.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-dijkstra" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/02/dijkstra/" class="article-date">
+  <time datetime="2019-01-02T14:31:12.000Z" itemprop="datePublished">2019-01-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      dijkstra(最短路算法)
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <blockquote>
+<p>该算法的关键在于找一个优先队列(比如列表，二叉树)维护相关的集合。同时支持：</p>
+</blockquote>
+<ul>
+<li>insert 插入一个新值</li>
+<li>decrease-key 根据元素更新更小的key</li>
+<li>delete-min 从集合移除最小的key</li>
+<li>make-queue 根据优先级生成队列</li>
+</ul>
+<p>图用邻接矩阵a[][]存储，a[i][j]代表节点i到节点j的距离， a[i][j]== MAX_VALUE &gt;&gt; 1 则说明节点i和节点j不连通。以下图为例：<br><img src="/images/min-path.svg" alt></p>
+<p>0为初始节点，则邻接矩阵为：</p>
+<p>a[0][1] = 4</p>
+<p>a[0][2] = 2</p>
+<p>a[1][2] = 3</p>
+<p>a[1][3] = 2</p>
+<p>a[2][1] = 1</p>
+<p>a[2][3] = 4</p>
+<p>a[2][4] = 5</p>
+<p>a[4][3] = 1</p>
+<p>py脚本：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">MAX_VALUE = <span class="number">10000</span></span><br><span class="line">COL = <span class="number">5</span></span><br><span class="line">ROW = <span class="number">5</span></span><br><span class="line">a = [[MAX_VALUE <span class="keyword">for</span> i <span class="keyword">in</span> range(COL)] <span class="keyword">for</span> j <span class="keyword">in</span> range(ROW)]</span><br><span class="line"><span class="comment"># 初始节点</span></span><br><span class="line">a[<span class="number">0</span>][<span class="number">0</span>] = <span class="number">0</span></span><br><span class="line">a[<span class="number">0</span>][<span class="number">1</span>] = <span class="number">4</span></span><br><span class="line">a[<span class="number">0</span>][<span class="number">2</span>] = <span class="number">2</span></span><br><span class="line">a[<span class="number">1</span>][<span class="number">2</span>] = <span class="number">3</span></span><br><span class="line">a[<span class="number">1</span>][<span class="number">3</span>] = <span class="number">2</span></span><br><span class="line">a[<span class="number">2</span>][<span class="number">1</span>] = <span class="number">1</span></span><br><span class="line">a[<span class="number">2</span>][<span class="number">3</span>] = <span class="number">4</span></span><br><span class="line">a[<span class="number">2</span>][<span class="number">4</span>] = <span class="number">5</span></span><br><span class="line">a[<span class="number">4</span>][<span class="number">3</span>] = <span class="number">1</span></span><br><span class="line"><span class="comment"># 初始节点, 以节点0为起点</span></span><br><span class="line"><span class="comment"># make queue</span></span><br><span class="line">queue = [a[<span class="number">0</span>][i] <span class="keyword">for</span> i <span class="keyword">in</span> range(ROW)]</span><br><span class="line"><span class="comment"># 标记已经被删除的元素</span></span><br><span class="line">s = set()</span><br><span class="line"><span class="comment"># 保存结果</span></span><br><span class="line">res = []</span><br><span class="line"><span class="keyword">while</span> len(s) != len(queue):</span><br><span class="line">    <span class="comment"># 查找最小矩离</span></span><br><span class="line">    min_val = MAX_VALUE</span><br><span class="line">    index = <span class="number">0</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(COL):</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">in</span> s:</span><br><span class="line">            <span class="comment"># 已经被删除</span></span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="keyword">if</span> queue[i] &lt; min_val:</span><br><span class="line">            min_val = queue[i]</span><br><span class="line">            index = i</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(COL):</span><br><span class="line">        <span class="keyword">if</span> i <span class="keyword">in</span> s:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">        <span class="comment"># decrease key</span></span><br><span class="line">        queue[i] = min(queue[i], queue[index]+a[index][i])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 删除最小值, delete min</span></span><br><span class="line">    s.add(index)</span><br><span class="line">    res.append(index)</span><br><span class="line">print(res)</span><br></pre></td></tr></table></figure></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2019/01/02/dijkstra/" data-id="cjtzh81t00008ysx8bp9wgoad" class="article-share-link">Share</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/05/golang-questions/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          golang-集锦
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/01/02/quick-sort/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">快速排序</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/golang/">golang</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/http/">http</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/tcp/">tcp</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/quick-sort/">quick-sort</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/quick-sort/" style="font-size: 10px;">quick-sort</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/01/05/golang-questions/">golang-集锦</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/02/dijkstra/">dijkstra(最短路算法)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/02/quick-sort/">快速排序</a>
+          </li>
+        
+          <li>
+            <a href="/2018/12/02/micro-service/">微服务</a>
+          </li>
+        
+          <li>
+            <a href="/2018/11/02/goroutine-scheduler/">goroutine-调度</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
