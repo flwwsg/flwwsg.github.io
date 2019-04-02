@@ -5,20 +5,20 @@
   
 
   
-  <title>sql-集锦 | Hexo</title>
+  <title>redis-hyperloglog | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="MySQL 的聚簇索引和非聚簇索引有什么区别聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针 查 A in () AND B in () 时, MySQL 是怎么利用索引的先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选 为什么选MySQL 的InnoDB引擎几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC 分库">
-<meta name="keywords" content="sql">
+  <meta name="description" content="hyperloglog是redis提供用来解决不精确的去重计数方案，虽然不精确但也不是非常不精确，标准误差是0.81%。包括pfadd和pfcount，pfmerge指令。pfadd用法和set集合的sadd一样，pfcount和scard用法一样，直接获取计数值，pfmerge用于将多个pf计数值累加在一起形成一个新的pf值。 hyperloglog需要占用一定的存储空间，相比set存储方案，那">
+<meta name="keywords" content="redis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sql-集锦">
-<meta property="og:url" content="http://flwwsg.github.io/2018/11/02/sql/index.html">
+<meta property="og:title" content="redis-hyperloglog">
+<meta property="og:url" content="http://flwwsg.github.io/2018/12/17/redis-hyperloglog/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="MySQL 的聚簇索引和非聚簇索引有什么区别聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针 查 A in () AND B in () 时, MySQL 是怎么利用索引的先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选 为什么选MySQL 的InnoDB引擎几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC 分库">
+<meta property="og:description" content="hyperloglog是redis提供用来解决不精确的去重计数方案，虽然不精确但也不是非常不精确，标准误差是0.81%。包括pfadd和pfcount，pfmerge指令。pfadd用法和set集合的sadd一样，pfcount和scard用法一样，直接获取计数值，pfmerge用于将多个pf计数值累加在一起形成一个新的pf值。 hyperloglog需要占用一定的存储空间，相比set存储方案，那">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-02T07:30:04.774Z">
+<meta property="og:updated_time" content="2019-04-02T08:27:38.972Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sql-集锦">
-<meta name="twitter:description" content="MySQL 的聚簇索引和非聚簇索引有什么区别聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针 查 A in () AND B in () 时, MySQL 是怎么利用索引的先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选 为什么选MySQL 的InnoDB引擎几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC 分库">
+<meta name="twitter:title" content="redis-hyperloglog">
+<meta name="twitter:description" content="hyperloglog是redis提供用来解决不精确的去重计数方案，虽然不精确但也不是非常不精确，标准误差是0.81%。包括pfadd和pfcount，pfmerge指令。pfadd用法和set集合的sadd一样，pfcount和scard用法一样，直接获取计数值，pfmerge用于将多个pf计数值累加在一起形成一个新的pf值。 hyperloglog需要占用一定的存储空间，相比set存储方案，那">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -65,12 +65,16 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-sql" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-redis-hyperloglog" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/11/02/sql/" class="article-date">
-  <time datetime="2018-11-02T13:04:14.000Z" itemprop="datePublished">2018-11-02</time>
+    <a href="/2018/12/17/redis-hyperloglog/" class="article-date">
+  <time datetime="2018-12-17T14:20:56.000Z" itemprop="datePublished">2018-12-17</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -79,7 +83,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      sql-集锦
+      redis-hyperloglog
     </h1>
   
 
@@ -87,18 +91,16 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="MySQL-的聚簇索引和非聚簇索引有什么区别"><a href="#MySQL-的聚簇索引和非聚簇索引有什么区别" class="headerlink" title="MySQL 的聚簇索引和非聚簇索引有什么区别"></a>MySQL 的聚簇索引和非聚簇索引有什么区别</h3><p>聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针</p>
-<h3 id="查-A-in-AND-B-in-时-MySQL-是怎么利用索引的"><a href="#查-A-in-AND-B-in-时-MySQL-是怎么利用索引的" class="headerlink" title="查 A in () AND B in () 时, MySQL 是怎么利用索引的"></a>查 A in () AND B in () 时, MySQL 是怎么利用索引的</h3><p>先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选</p>
-<h3 id="为什么选MySQL-的InnoDB引擎"><a href="#为什么选MySQL-的InnoDB引擎" class="headerlink" title="为什么选MySQL 的InnoDB引擎"></a>为什么选MySQL 的InnoDB引擎</h3><p>几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC</p>
-<h4 id="分库分表后怎么查询分页？"><a href="#分库分表后怎么查询分页？" class="headerlink" title="分库分表后怎么查询分页？"></a>分库分表后怎么查询分页？</h4><p>每张表查 N 条数据由 client 或 proxy merge</p>
+        <p>hyperloglog是redis提供用来解决不精确的去重计数方案，虽然不精确但也不是非常不精确，标准误差是0.81%。包括pfadd和pfcount，pfmerge指令。pfadd用法和set集合的sadd一样，pfcount和scard用法一样，直接获取计数值，pfmerge用于将多个pf计数值累加在一起形成一个新的pf值。</p>
+<p>hyperloglog需要占用一定的存储空间，相比set存储方案，那就是小巫见大巫。其实现原理来源于Count-Distinct Problem。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cjtzisstr0014dgx8b486khvt" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/17/redis-hyperloglog/" data-id="cjtzisstf000fdgx850aor3ip" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
 
     </footer>
   </div>
@@ -106,19 +108,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/11/02/goroutine-scheduler/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/12/17/redis-bloom/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          goroutine-调度
+          redis 布隆过滤器
         
       </div>
     </a>
   
   
-    <a href="/2018/09/05/http/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/12/17/redis-transaction/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">http</div>
+      <div class="article-nav-title">redis事务</div>
     </a>
   
 </nav>

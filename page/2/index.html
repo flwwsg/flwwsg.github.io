@@ -62,6 +62,342 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-micro-service" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/02/micro-service/" class="article-date">
+  <time datetime="2018-12-02T13:30:43.000Z" itemprop="datePublished">2018-12-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/02/micro-service/">微服务</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h3><p>服务发现有三个角色，服务提供者、服务消费者和服务中介。</p>
+<p>服务中介是联系服务提供者和服务消费者的桥梁。服务提供者将自己提供的服务地址注册到服务中介，服务消费者从服务中介那里查找自己想要的服务的地址，然后享受这个服务。服务中介提供多个服务，每个服务对应多个服务提供者。</p>
+<h3 id="配置中心怎么做服务发现"><a href="#配置中心怎么做服务发现" class="headerlink" title="配置中心怎么做服务发现"></a>配置中心怎么做服务发现</h3><p>Push 的经典实现有两种:</p>
+<ul>
+<li>基于 socket 长连接的 notify，典型的实现如 zookeeper</li>
+<li>另一种为 HTTP 连接所使用 Long Polling。<br>但是基于 socket 长连接的 notify 和基于 HTTP 协议的 Long Polling 都会存在notify消息丢失的问题。所以通过 Pull 的方式定时轮询也必不可少，时间间隔的选择也很关键，频率越高服务注册中心所承受的压力也越大。需要结合服务端的性能和业务的规模进行权衡。</li>
+</ul>
+<p>zk: 服务实例注册的 Node 类型是 ephemeral/ɪˈfɛmərəl/ node，这种类型的节点只有在客户端保持着连接的时候才有效。所以当某个服务实例被停止或者出现网络异常的时候，对应的节点也会被删掉。因此，任何时候从 ZooKeeper 里查询到的都是当前活跃的实例。借助 ZooKeeper 的推送功能，服务的消费者可以得知实例的变化，从而可以从容应对服务实例的宕机和新实例的添加，无需重启</p>
+<p>etcd: 需要搭配一些第三方工具才可以提供服务发现功能。如Registrator，Confd</p>
+<p>Consul：与Zookeeper和etcd不一样，Consul内嵌实现了服务发现系统，还包括节点健康检查和运行在其上的服务。</p>
+<h3 id="failover"><a href="#failover" class="headerlink" title="failover"></a>failover</h3><ul>
+<li>绝大多数的服务注册中心都提供了健康检查功能，在应用停止后会自动摘除服务所对应的节点。</li>
+<li>更优雅的方式，先将即将停止的应用所对应的权重调成 0，此时上游将不再调用此应用。这时候的停止应用的操作对服务订阅者完全没有影响</li>
+</ul>
+<h3 id="服务的健康检查"><a href="#服务的健康检查" class="headerlink" title="服务的健康检查"></a>服务的健康检查</h3><p>客户端心跳和服务端主动探测,如zk依赖了组件本身提供的临时节点的特性，通过 ZooKeeper 连接的 session 来维持临时节点。</p>
+<h3 id="serverless"><a href="#serverless" class="headerlink" title="serverless"></a>serverless</h3><p>Serveless,通常包含了两个领域BaaS（Backend as a Service）和FaaS（Function as a Service）,是继 docker 与容器编排之后的又一次应用开发与基础设施提供方之间的边界划分，大体是云服务的未来，把蛋糕从企业的IT、运维与中间件部门切走，形成规模效应，做得越多赚得越多；公司内的话 servless 能够帮助加速前台业务迭代，未来可能会有比 servless 更适合中后台的架构</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/12/02/micro-service/" data-id="cjtzisstg000hdgx8jmswuilz" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/zk/">zk</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-goroutine-scheduler" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/02/goroutine-scheduler/" class="article-date">
+  <time datetime="2018-11-02T13:15:21.000Z" itemprop="datePublished">2018-11-02</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/golang/">golang</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/02/goroutine-scheduler/">goroutine-调度</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h2 id="G-P-M"><a href="#G-P-M" class="headerlink" title="G, P, M"></a>G, P, M</h2><ul>
+<li>G: 表示goroutine，存储了goroutine的执行stack信息、goroutine状态以及goroutine的任务函数等；另外G对象是可以重用的。</li>
+<li>P: 表示逻辑processor，P的数量决定了系统内最大可并行的G的数量（前提：系统的物理cpu核数&gt;=P的数量）；P的最大作用还是其拥有的各种G对象队列、链表、一些cache和状态。</li>
+<li>M: M代表着真正的执行计算资源。在绑定有效的p后，进入schedule循环；而schedule循环的机制大致是从各种队列、p的本地队列中获取G，切换到G的执行栈上并执行G的函数，调用goexit做清理工作并回到m，如此反复。M并不保留G状态，这是G可以跨M调度的基础。</li>
+</ul>
+<blockquote>
+<p><img src="/images/goroutine-scheduler-model.png" alt></p>
+</blockquote>
+<p>P是一个“逻辑Proccessor”，每个G要想真正运行起来，首先需要被分配一个P（进入到P的local runq中，这里暂忽略global runq那个环节）。对于G来说，P就是运行它的“CPU”，可以说：G的眼里只有P。但从Go scheduler视角来看，真正的“CPU”是M，只有将P和M绑定才能让P的runq中G得以真实运行起来。这样的P与M的关系，就好比Linux操作系统调度层面用户线程(user thread)与核心线程(kernel thread)的对应关系那样(N x M)。</p>
+<p>和操作系统按时间片调度线程不同，Go并没有时间片的概念。如果某个G没有进行system call调用、没有进行I/O操作、没有阻塞在一个channel操作上，那么m是如何让G停下来并调度下一个runnable G的呢？答案是：G是被抢占调度的。</p>
+<p>除非极端的无限循环或死循环，否则只要G调用函数，Go runtime就有抢占G的机会。Go程序启动时，runtime会去启动一个名为sysmon的m(一般称为监控线程)，该m无需绑定p即可运行，该m在整个Go程序的运行过程中至关重要：sysmon每20us~10ms启动一次，sysmon主要完成如下工作：</p>
+<ul>
+<li>释放闲置超过5分钟的span物理内存</li>
+<li>如果超过2分钟没有垃圾回收，强制执行</li>
+<li>将长时间未处理的netpoll结果添加到任务队列</li>
+<li>向长时间运行的G任务发出抢占调度</li>
+<li>收回因syscall长时间阻塞的P</li>
+</ul>
+<p>所以一个G任务运行10ms，sysmon就会认为其运行时间太久而发出抢占式调度的请求。一旦G的抢占标志位被设为true，那么待这个G下一次调用函数或方法时，runtime便可以将G抢占，并移出运行状态，放入P的local runq中，等待下一次被调度。</p>
+<h3 id="channel阻塞或network-I-O情况下的调度"><a href="#channel阻塞或network-I-O情况下的调度" class="headerlink" title="channel阻塞或network I/O情况下的调度"></a>channel阻塞或network I/O情况下的调度</h3><p>如果G被阻塞在某个channel操作或network I/O操作上时，G会被放置到某个wait队列中，而M会尝试运行下一个runnable的G；如果此时没有runnable的G供m运行，那么m将解绑P，并进入sleep状态。当I/O available或channel操作完成，在wait队列中的G会被唤醒，标记为runnable，放入到某P的队列中，绑定一个M继续执行。</p>
+<h3 id="system-call阻塞情况下的调度"><a href="#system-call阻塞情况下的调度" class="headerlink" title="system call阻塞情况下的调度"></a>system call阻塞情况下的调度</h3><p>如果G被阻塞在某个system call操作上，那么不光G会阻塞，执行该G的M也会解绑P(实质是被sysmon抢走了)，与G一起进入sleep状态。如果此时有idle的M，则P与其绑定继续执行其他G；如果没有idle M，但仍然有其他G要去执行，那么就会创建一个新M。</p>
+<p>当阻塞在syscall上的G完成syscall调用后，G会去尝试获取一个可用的P，如果没有可用的P，那么G会被标记为runnable，之前的那个sleep的M将再次进入sleep。</p>
+<p><strong><em>调度器状态的查看方法</em></strong><br>使用Go运行时环境变量GODEBUG</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/11/02/goroutine-scheduler/" data-id="cjtzisstd000cdgx8ue5tcs5n" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-sql" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/02/sql/" class="article-date">
+  <time datetime="2018-11-02T13:04:14.000Z" itemprop="datePublished">2018-11-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/02/sql/">sql-集锦</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="MySQL-的聚簇索引和非聚簇索引有什么区别"><a href="#MySQL-的聚簇索引和非聚簇索引有什么区别" class="headerlink" title="MySQL 的聚簇索引和非聚簇索引有什么区别"></a>MySQL 的聚簇索引和非聚簇索引有什么区别</h3><p>聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针</p>
+<h3 id="查-A-in-AND-B-in-时-MySQL-是怎么利用索引的"><a href="#查-A-in-AND-B-in-时-MySQL-是怎么利用索引的" class="headerlink" title="查 A in () AND B in () 时, MySQL 是怎么利用索引的"></a>查 A in () AND B in () 时, MySQL 是怎么利用索引的</h3><p>先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选</p>
+<h3 id="为什么选MySQL-的InnoDB引擎"><a href="#为什么选MySQL-的InnoDB引擎" class="headerlink" title="为什么选MySQL 的InnoDB引擎"></a>为什么选MySQL 的InnoDB引擎</h3><p>几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC</p>
+<h4 id="分库分表后怎么查询分页？"><a href="#分库分表后怎么查询分页？" class="headerlink" title="分库分表后怎么查询分页？"></a>分库分表后怎么查询分页？</h4><p>每张表查 N 条数据由 client 或 proxy merge</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cjtzisstr0014dgx8b486khvt" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-http" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/05/http/" class="article-date">
+  <time datetime="2018-09-05T14:31:12.000Z" itemprop="datePublished">2018-09-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/http/">http</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/05/http/">http</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="常见的-HTTP-状态码有哪些"><a href="#常见的-HTTP-状态码有哪些" class="headerlink" title="常见的 HTTP 状态码有哪些"></a>常见的 HTTP 状态码有哪些</h3><table>
+<thead>
+<tr>
+<th>状态码</th>
+<th>类别</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1xx</td>
+<td>信息性状态码（Informational）</td>
+<td>服务器正在处理请求</td>
+</tr>
+<tr>
+<td>2xx</td>
+<td>成功状态码（Success）</td>
+<td>请求已正常处理完毕</td>
+</tr>
+<tr>
+<td>3xx</td>
+<td>重定向状态码（Redirection）</td>
+<td>需要进行额外操作以完成请求</td>
+</tr>
+<tr>
+<td>4xx</td>
+<td>客户端错误状态码（Client Error）</td>
+<td>客户端原因导致服务器无法处理请求</td>
+</tr>
+<tr>
+<td>5xx</td>
+<td>服务器错误状态码（Server Error）</td>
+<td>服务器原因导致处理请求出错</td>
+</tr>
+</tbody>
+</table>
+<h4 id="主要有"><a href="#主要有" class="headerlink" title="主要有"></a>主要有</h4><ul>
+<li>200 一切正常</li>
+<li>401 (未授权) 请求要求身份验证</li>
+<li>403 (禁止) 服务器拒绝请求</li>
+<li>404 未找到</li>
+<li>503 服务器超负载或停机维护</li>
+<li>505 (HTTP 版本不受支持) 服务器不支持请求中所用的 HTTP 协议版本</li>
+</ul>
+<h3 id="301和302有什么区别"><a href="#301和302有什么区别" class="headerlink" title="301和302有什么区别"></a>301和302有什么区别</h3><p>301: 永久重定向，表示请求的资源已经永久的搬到了其他位置</p>
+<p>302: 临时重定向，表示请求的资源临时搬到了其他位置</p>
+<h3 id="504和500有什么区别"><a href="#504和500有什么区别" class="headerlink" title="504和500有什么区别"></a>504和500有什么区别</h3><p>500： 表示服务器执行请求的时候出错了，可能是bug。。</p>
+<p>504: (网关超时) 服务器作为网关或代理，但是没有及时从上游服务器收到请求</p>
+<h3 id="HTTPS-和-HTTP-有什么区别"><a href="#HTTPS-和-HTTP-有什么区别" class="headerlink" title="HTTPS 和 HTTP 有什么区别"></a>HTTPS 和 HTTP 有什么区别</h3><table>
+<thead>
+<tr>
+<th>-</th>
+<th>https</th>
+<th>http</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>证书</td>
+<td>需要ca证书</td>
+<td>不需要</td>
+</tr>
+<tr>
+<td>使用协议</td>
+<td>ssl加密传输协议</td>
+<td>超文本协议，明文传输</td>
+</tr>
+<tr>
+<td>端口</td>
+<td>443</td>
+<td>80</td>
+</tr>
+</tbody>
+</table>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/09/05/http/" data-id="cjtzisstc000bdgx8vqyomch5" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/">https</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-tcp-handshake" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/05/tcp-handshake/" class="article-date">
+  <time datetime="2018-09-05T14:20:10.000Z" itemprop="datePublished">2018-09-05</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/tcp/">tcp</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/05/tcp-handshake/">TCP三次握手、四次挥手的过程</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h3><h4 id="第一次握手"><a href="#第一次握手" class="headerlink" title="第一次握手"></a>第一次握手</h4><p>client发送一个SYN(J)包给server，然后等待server的ACK回复，进入SYN-SENT状态。ps: SYN为synchronize的缩写，ACK为acknowledgment的缩写。</p>
+<h4 id="第二次握手"><a href="#第二次握手" class="headerlink" title="第二次握手"></a>第二次握手</h4><p>server接收到SYN(seq=J)包后就返回一个ACK(J+1)包以及一个自己的<strong>SYN(K)</strong>包，然后等待client的ACK回复，server进入SYN-RECIVED状态。</p>
+<h4 id="第三次握手"><a href="#第三次握手" class="headerlink" title="第三次握手"></a>第三次握手</h4><p>client接收到server发回的ACK(J+1)包后，进入ESTABLISHED状态。然后根据server发来的SYN(K)包，返回给等待中的server一个ACK(K+1)包。等待中的server收到ACK回复，也把自己的状态设置为ESTABLISHED。到此TCP三次握手完成，client与server可以正常进行通信了</p>
+<p><strong><em>为什么要进行三次握手</em></strong></p>
+<p>三次握手中的客户端和服务器之间的握手过程比喻成A和B通信的过程:</p>
+<p>在第一次通信过程中，A向B发送信息之后，B收到信息后可以确认自己的收信能力和A的发信能力没有问题。</p>
+<p>在第二次通信中，B向A发送信息之后，A可以确认自己的发信能力和B的收信能力没有问题，<strong><em>但是B不知道自己的发信能力到底如何</em></strong>，所以就需要第三次通信。</p>
+<p>在第三次通信中，A向B发送信息之后，B就可以确认自己的发信能力没有问题。</p>
+<h3 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h3><h4 id="第一次挥手"><a href="#第一次挥手" class="headerlink" title="第一次挥手"></a>第一次挥手</h4><p>client发送一个FIN(M)包，此时client进入FIN-WAIT-1状态，这表明client已经没有数据要发送了。</p>
+<h4 id="第二次挥手"><a href="#第二次挥手" class="headerlink" title="第二次挥手"></a>第二次挥手</h4><p>server收到了client发来的FIN(M)包后，向client发回一个ACK(M+1)包，此时server进入CLOSE-WAIT状态，client进入FIN-WAIT-2状态。</p>
+<h4 id="第三次挥手"><a href="#第三次挥手" class="headerlink" title="第三次挥手"></a>第三次挥手</h4><p>server向client发送FIN(N)包，请求关闭连接，同时server进入LAST-ACK状态。</p>
+<h4 id="第四次挥手"><a href="#第四次挥手" class="headerlink" title="第四次挥手"></a>第四次挥手</h4><p>client收到server发送的FIN(N)包，进入TIME-WAIT状态。向server发送<strong>ACK(N+1)</strong>包，server收到client的ACK(N+1)包以后，进入CLOSE状态；client等待一段时间还没有得到回复后判断server已正式关闭，进入CLOSE状态。</p>
+<p><strong><em>第二次挥手、第三次挥手没有合并是因为tcp存在半关闭状态，即第二次挥手后，客户端没有东西发给服务端，but服务端还可以向客户端下发数据（tcp是全双工）</em></strong></p>
+<p><strong><em>关于非常特殊time_wait状态</em></strong></p>
+<p>它是主动关闭的一方在回复完对方的挥手后进入的一个长期状态，这个状态标准的持续时间是4分钟，4分钟后才会进入到closed状态，释放套接字资源。不过在具体实现上这个时间是可以调整的。</p>
+<p>它的作用是重传最后一个ack报文，确保对方可以收到。因为如果对方没有收到ack的话，会重传fin报文，处于time_wait状态的套接字会立即向对方重发ack报文。</p>
+<p>同时在这段时间内，该链接在对话期间于网际路由上产生的残留报文(因为路径过于崎岖，数据报文走的时间太长，重传的报文都收到了，原始报文还在路上)传过来时，都会被立即丢弃掉。4分钟的时间足以使得这些残留报文彻底消逝。不然当新的端口被重复利用时，这些残留报文可能会干扰新的链接。<br>4分钟就是2个MSL，每个MSL是2分钟。MSL就是maximium segment lifetime——最长报文寿命。这个时间是由官方RFC协议规定的。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtzissts0018dgx87vtqnrya" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-tcp-udp" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/09/05/tcp-udp/" class="article-date">
@@ -172,7 +508,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-udp/" data-id="cjtzhuvx10014agx8mb9zhk6q" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-udp/" data-id="cjtzisstu001adgx86u5pium7" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/udp/">udp</a></li></ul>
@@ -199,7 +535,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Categories</h3>
     <div class="widget">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/golang/">golang</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/http/">http</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/tcp/">tcp</a></li></ul>
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/golang/">golang</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/http/">http</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/redis/lock/">lock</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tcp/">tcp</a></li></ul>
     </div>
   </div>
 
@@ -209,7 +545,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bloom/">bloom</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
     </div>
   </div>
 
@@ -219,7 +555,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/algorithms/" style="font-size: 20px;">algorithms</a> <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/algorithms/" style="font-size: 15px;">algorithms</a> <a href="/tags/bloom/" style="font-size: 10px;">bloom</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/redis/" style="font-size: 20px;">redis</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 15px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 

@@ -5,20 +5,20 @@
   
 
   
-  <title>sql-集锦 | Hexo</title>
+  <title>分布式锁 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="MySQL 的聚簇索引和非聚簇索引有什么区别聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针 查 A in () AND B in () 时, MySQL 是怎么利用索引的先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选 为什么选MySQL 的InnoDB引擎几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC 分库">
-<meta name="keywords" content="sql">
+  <meta name="description" content="分布式锁本质上要实现的目标就是在redis里面占一个坑，当别的进程也要来占时，发现已经有人先到了，就只好放弃或者稍后再试。 占坑一般是用setnx，只允许一个客户端占。先来先占，用完了，再del释放。 12345&amp;gt;set lock:userxxx true ex 5 nxOK//do something....&amp;gt;del lock:userxxx 超时问题。如果在加锁和释文锁之间逻辑执行">
+<meta name="keywords" content="redis">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sql-集锦">
-<meta property="og:url" content="http://flwwsg.github.io/2018/11/02/sql/index.html">
+<meta property="og:title" content="分布式锁">
+<meta property="og:url" content="http://flwwsg.github.io/2018/12/16/redis-lock/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="MySQL 的聚簇索引和非聚簇索引有什么区别聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针 查 A in () AND B in () 时, MySQL 是怎么利用索引的先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选 为什么选MySQL 的InnoDB引擎几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC 分库">
+<meta property="og:description" content="分布式锁本质上要实现的目标就是在redis里面占一个坑，当别的进程也要来占时，发现已经有人先到了，就只好放弃或者稍后再试。 占坑一般是用setnx，只允许一个客户端占。先来先占，用完了，再del释放。 12345&amp;gt;set lock:userxxx true ex 5 nxOK//do something....&amp;gt;del lock:userxxx 超时问题。如果在加锁和释文锁之间逻辑执行">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-02T07:30:04.774Z">
+<meta property="og:updated_time" content="2019-04-02T08:19:40.217Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sql-集锦">
-<meta name="twitter:description" content="MySQL 的聚簇索引和非聚簇索引有什么区别聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针 查 A in () AND B in () 时, MySQL 是怎么利用索引的先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选 为什么选MySQL 的InnoDB引擎几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC 分库">
+<meta name="twitter:title" content="分布式锁">
+<meta name="twitter:description" content="分布式锁本质上要实现的目标就是在redis里面占一个坑，当别的进程也要来占时，发现已经有人先到了，就只好放弃或者稍后再试。 占坑一般是用setnx，只允许一个客户端占。先来先占，用完了，再del释放。 12345&amp;gt;set lock:userxxx true ex 5 nxOK//do something....&amp;gt;del lock:userxxx 超时问题。如果在加锁和释文锁之间逻辑执行">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -65,12 +65,16 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-sql" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-redis-lock" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/11/02/sql/" class="article-date">
-  <time datetime="2018-11-02T13:04:14.000Z" itemprop="datePublished">2018-11-02</time>
+    <a href="/2018/12/16/redis-lock/" class="article-date">
+  <time datetime="2018-12-16T14:13:22.000Z" itemprop="datePublished">2018-12-16</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>►<a class="article-category-link" href="/categories/redis/lock/">lock</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -79,7 +83,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      sql-集锦
+      分布式锁
     </h1>
   
 
@@ -87,18 +91,23 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="MySQL-的聚簇索引和非聚簇索引有什么区别"><a href="#MySQL-的聚簇索引和非聚簇索引有什么区别" class="headerlink" title="MySQL 的聚簇索引和非聚簇索引有什么区别"></a>MySQL 的聚簇索引和非聚簇索引有什么区别</h3><p>聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针</p>
-<h3 id="查-A-in-AND-B-in-时-MySQL-是怎么利用索引的"><a href="#查-A-in-AND-B-in-时-MySQL-是怎么利用索引的" class="headerlink" title="查 A in () AND B in () 时, MySQL 是怎么利用索引的"></a>查 A in () AND B in () 时, MySQL 是怎么利用索引的</h3><p>先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选</p>
-<h3 id="为什么选MySQL-的InnoDB引擎"><a href="#为什么选MySQL-的InnoDB引擎" class="headerlink" title="为什么选MySQL 的InnoDB引擎"></a>为什么选MySQL 的InnoDB引擎</h3><p>几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC</p>
-<h4 id="分库分表后怎么查询分页？"><a href="#分库分表后怎么查询分页？" class="headerlink" title="分库分表后怎么查询分页？"></a>分库分表后怎么查询分页？</h4><p>每张表查 N 条数据由 client 或 proxy merge</p>
+        <p>分布式锁本质上要实现的目标就是在redis里面占一个坑，当别的进程也要来占时，发现已经有人先到了，就只好放弃或者稍后再试。</p>
+<p>占坑一般是用setnx，只允许一个客户端占。先来先占，用完了，再del释放。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&gt;set lock:userxxx true ex 5 nx</span><br><span class="line">OK</span><br><span class="line">//<span class="keyword">do</span> something</span><br><span class="line">....</span><br><span class="line">&gt;del <span class="keyword">lock</span>:userxxx</span><br></pre></td></tr></table></figure>
+<p>超时问题。如果在加锁和释文锁之间逻辑执行的太长，以至于超出了锁的超时限制，就会出现问题。因为锁过期了，第二个线程重新持有了这把锁，但是紧接着第一个线程执行完了业务逻辑，就把锁释放了，第三个线程就会在第二个线程逻辑执行完之间拿到锁。</p>
+<p>解决方案：</p>
+<ul>
+<li>换zk，用心跳解决</li>
+<li>为set指令的value参数设置为一个随机数，释放时先匹配随机数是否一致，然后再删除key</li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cjtzisstr0014dgx8b486khvt" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/16/redis-lock/" data-id="cjtzisstn000tdgx8jrfpt81d" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
 
     </footer>
   </div>
@@ -106,19 +115,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/11/02/goroutine-scheduler/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2018/12/17/redis-transaction/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          goroutine-调度
+          redis事务
         
       </div>
     </a>
   
   
-    <a href="/2018/09/05/http/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/12/16/redis/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">http</div>
+      <div class="article-nav-title">redis-概述</div>
     </a>
   
 </nav>

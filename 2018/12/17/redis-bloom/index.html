@@ -5,20 +5,20 @@
   
 
   
-  <title>sql-集锦 | Hexo</title>
+  <title>redis 布隆过滤器 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="MySQL 的聚簇索引和非聚簇索引有什么区别聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针 查 A in () AND B in () 时, MySQL 是怎么利用索引的先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选 为什么选MySQL 的InnoDB引擎几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC 分库">
-<meta name="keywords" content="sql">
+  <meta name="description" content="布隆过滤器可以理解为一个不怎么精确的set结构，当你使用它的contains方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判率。当布隆过滤说某个值存在时，这个值可能不存在；当它说不存在时，那就肯定不存在。   向布隆过滤器中添加key时，会使用多个hash函数对key进行hash算得一个整数索引值，然后">
+<meta name="keywords" content="redis,bloom">
 <meta property="og:type" content="article">
-<meta property="og:title" content="sql-集锦">
-<meta property="og:url" content="http://flwwsg.github.io/2018/11/02/sql/index.html">
+<meta property="og:title" content="redis 布隆过滤器">
+<meta property="og:url" content="http://flwwsg.github.io/2018/12/17/redis-bloom/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="MySQL 的聚簇索引和非聚簇索引有什么区别聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针 查 A in () AND B in () 时, MySQL 是怎么利用索引的先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选 为什么选MySQL 的InnoDB引擎几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC 分库">
+<meta property="og:description" content="布隆过滤器可以理解为一个不怎么精确的set结构，当你使用它的contains方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判率。当布隆过滤说某个值存在时，这个值可能不存在；当它说不存在时，那就肯定不存在。   向布隆过滤器中添加key时，会使用多个hash函数对key进行hash算得一个整数索引值，然后">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-04-02T07:30:04.774Z">
+<meta property="og:updated_time" content="2019-04-02T08:26:27.027Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="sql-集锦">
-<meta name="twitter:description" content="MySQL 的聚簇索引和非聚簇索引有什么区别聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针 查 A in () AND B in () 时, MySQL 是怎么利用索引的先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选 为什么选MySQL 的InnoDB引擎几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC 分库">
+<meta name="twitter:title" content="redis 布隆过滤器">
+<meta name="twitter:description" content="布隆过滤器可以理解为一个不怎么精确的set结构，当你使用它的contains方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判率。当布隆过滤说某个值存在时，这个值可能不存在；当它说不存在时，那就肯定不存在。   向布隆过滤器中添加key时，会使用多个hash函数对key进行hash算得一个整数索引值，然后">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -65,12 +65,16 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main"><article id="post-sql" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-redis-bloom" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2018/11/02/sql/" class="article-date">
-  <time datetime="2018-11-02T13:04:14.000Z" itemprop="datePublished">2018-11-02</time>
+    <a href="/2018/12/17/redis-bloom/" class="article-date">
+  <time datetime="2018-12-17T14:20:56.000Z" itemprop="datePublished">2018-12-17</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -79,7 +83,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      sql-集锦
+      redis 布隆过滤器
     </h1>
   
 
@@ -87,18 +91,18 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h3 id="MySQL-的聚簇索引和非聚簇索引有什么区别"><a href="#MySQL-的聚簇索引和非聚簇索引有什么区别" class="headerlink" title="MySQL 的聚簇索引和非聚簇索引有什么区别"></a>MySQL 的聚簇索引和非聚簇索引有什么区别</h3><p>聚簇索引的叶子节点是数据节点（比如定义了主键时的主键索引），非聚簇索引叶子节点是指向数据块的指针</p>
-<h3 id="查-A-in-AND-B-in-时-MySQL-是怎么利用索引的"><a href="#查-A-in-AND-B-in-时-MySQL-是怎么利用索引的" class="headerlink" title="查 A in () AND B in () 时, MySQL 是怎么利用索引的"></a>查 A in () AND B in () 时, MySQL 是怎么利用索引的</h3><p>先走一个非聚簇索引，查询出行数据后再用另一列回表做筛选</p>
-<h3 id="为什么选MySQL-的InnoDB引擎"><a href="#为什么选MySQL-的InnoDB引擎" class="headerlink" title="为什么选MySQL 的InnoDB引擎"></a>为什么选MySQL 的InnoDB引擎</h3><p>几乎所有公司用 MySQL 都用 InnoDB，降低踩坑成本；聚簇索引，MVCC</p>
-<h4 id="分库分表后怎么查询分页？"><a href="#分库分表后怎么查询分页？" class="headerlink" title="分库分表后怎么查询分页？"></a>分库分表后怎么查询分页？</h4><p>每张表查 N 条数据由 client 或 proxy merge</p>
+        <p>布隆过滤器可以理解为一个不怎么精确的set结构，当你使用它的contains方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判率。当布隆过滤说某个值存在时，这个值可能不存在；当它说不存在时，那就肯定不存在。  </p>
+<p>向布隆过滤器中添加key时，会使用多个hash函数对key进行hash算得一个整数索引值，然后对位数组长度进行取模运算得到一个位置，每个hash函数都会算得一个不同的位置。再把位数组的这几个位置都置为1就完成了add操作。</p>
+<p>向布隆过滤器询问key是否存在时，跟add一样，也会把hash的几个位置都算出来，看看位数组中这几个位置是否都为1，只要有一个为0，说明布隆过滤器这个key不存在。如果都为1，并不能说明这个key一定存在，只是极有可能存在，因为这些位被置为1可能是因为其它key存在所致。如果这个位数组比稀疏，这个概率就会很大，如果 这个位数组比较拥挤，这个概率就会降低。</p>
+<p>布隆过滤器作为一个插件提供。有二个基本指令，bf.add添加元素，bf.exists查询元素是否存在，它的用法和set集合的sadd和sismember差不多。bf.madd指令一次添加多个，bf.mexists一次查询多个元素是否存在。bf.reserve 用于自定义参数布隆过滤器，有3个参数，分别是key， error_rate和initial_size。</p>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cjtzisstr0014dgx8b486khvt" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/17/redis-bloom/" data-id="cjtzisst70009dgx8x88qd74h" class="article-share-link">Share</a>
       
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bloom/">bloom</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
 
     </footer>
   </div>
@@ -106,19 +110,19 @@
     
 <nav id="article-nav">
   
-    <a href="/2018/11/02/goroutine-scheduler/" id="article-nav-newer" class="article-nav-link-wrap">
+    <a href="/2019/01/02/quick-sort/" id="article-nav-newer" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          goroutine-调度
+          快速排序
         
       </div>
     </a>
   
   
-    <a href="/2018/09/05/http/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2018/12/17/redis-hyperloglog/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">http</div>
+      <div class="article-nav-title">redis-hyperloglog</div>
     </a>
   
 </nav>
