@@ -109,7 +109,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2019/04/02/simple-question/" data-id="cjtzisstq0010dgx8ddtwcjpq" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2019/04/02/simple-question/" data-id="cjtzixkld001c74x863labgiy" class="article-share-link">Share</a>
       
       
     </footer>
@@ -159,7 +159,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2019/03/02/sample/" data-id="cjtzisstk000pdgx87ujieymk" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2019/03/02/sample/" data-id="cjtzixklf001g74x81t55pbn6" class="article-share-link">Share</a>
       
       
     </footer>
@@ -246,7 +246,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2019/01/05/golang-questions/" data-id="cjtzisst40007dgx8gf1cgeiq" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2019/01/05/golang-questions/" data-id="cjtzixkkg000d74x8t9py4tef" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
@@ -302,10 +302,95 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2019/01/02/dijkstra/" data-id="cjtzisst30006dgx8748ma68d" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2019/01/02/dijkstra/" data-id="cjtzixkk5000374x8i4wps9ws" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithms/">algorithms</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-rpc" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/02/rpc/" class="article-date">
+  <time datetime="2019-01-02T14:31:06.000Z" itemprop="datePublished">2019-01-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2019/01/02/rpc/">rpc简述</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h3><p>rpc远程过程调用，是分布式系统的一种通信方法，已经有40多年历史。nginx、redis、mysql、dubbo、hadoop、tensorflow等重量级开源产品都是在rpc技术的基础上构建上起来的。这里的rpc指的是广义的rpc，也就是分布式系统的通信技术。</p>
+<h3 id="交互流程"><a href="#交互流程" class="headerlink" title="交互流程"></a>交互流程</h3><ul>
+<li><p>rpc是两个子系统之前进行的直接消息交互，它使用操作系统提供的套接字作为消息载体，以特定的消息格式来定义消息内容和边界</p>
+</li>
+<li><p>rpc客户端通过文件描述符的读写api来访问操作系统内核中的网络模块为当前套接字分配的发送和接收缓存(send buffer, recv buffer)</p>
+</li>
+</ul>
+<h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><ul>
+<li>消息边界。rpc需要在一条tcp链接上进行多次消息传递，有连续的两条消息之间必须有明确的分割规则，以便接收端可以将消息分割开来。比较常用的是特殊分割符法和长度前缀法。</li>
+<li>消息的结构。每条消息都有它包含的语义结构信息，有些消息协议的结构信息是显式的，有些是隐式的。</li>
+<li>消息压缩。</li>
+<li>优化流量。采用变长整数varint以及zigzag编码——将负数编码成正奇数，正数编码成偶数。</li>
+</ul>
+<h3 id="go-sdk调用方法"><a href="#go-sdk调用方法" class="headerlink" title="go sdk调用方法"></a>go sdk调用方法</h3><ul>
+<li>定义服务。hello服务, Hello方法必须满足Go语言的RPC规则：方法只能有两个可序列化的参数，其中第二个参数是指针类型，并且返回一个error类型，同时必须是公开的方法</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> HelloService <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span><span class="params">(p *HelloService)</span> <span class="title">Hello</span><span class="params">(request <span class="keyword">string</span>, reply *<span class="keyword">string</span>)</span> <span class="title">error</span></span>&#123;</span><br><span class="line">    *reply = <span class="string">"hello:"</span> + request</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>注册。将HelloService类型的对象注册为一个RPC服务,其中rpc.Register函数调用会将对象类型中所有满足RPC规则的对象方法注册为RPC函数，所有注册的方法会放在“HelloService”服务空间之下。然后我们建立一个唯一的TCP链接，并且通过rpc.ServeConn函数在该TCP链接上为对方提供RPC服务</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    rpc.RegisterName(<span class="string">"HelloService"</span>, <span class="built_in">new</span>(HelloService)</span><br><span class="line">    listener, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">":1234"</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(<span class="string">"ListenTCP error:"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">    conn, err := listener.Accept()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(<span class="string">"Accept error:"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">    rpc.ServeConn(conn)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>客户端连接。首选是通过rpc.Dial拨号RPC服务，然后通过client.Call调用具体的RPC方法。在调用client.Call时，第一个参数是用点号链接的RPC服务名字和方法名字，第二和第三个参数分别我们定义RPC方法的两个参数。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    client, err := rpc.Dial(<span class="string">"tcp"</span>, <span class="string">"localhost:1234"</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatal(<span class="string">"dialing:"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> reply <span class="keyword">string</span></span><br><span class="line">    err = client.Call(<span class="string">"HelloService.Hello"</span>, <span class="string">"hello"</span>, &amp;reply)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">println</span>(reply)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="grpc调用方法"><a href="#grpc调用方法" class="headerlink" title="grpc调用方法"></a>grpc调用方法</h3><p>如果从Protobuf的角度看，gRPC只不过是一个针对service接口生成代码的生成器</p>
+<ul>
+<li><p>创建proto文件，定义服务接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">syntax = &quot;proto3&quot;</span><br><span class="line">package main;</span><br><span class="line">message String&#123;</span><br><span class="line">    string value = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">service HelloService &#123;</span><br><span class="line">    rpc Hello(String)returns(String);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用protoc-gen-go内置的gRPC插件生成gRPC代码：</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc --go_out=plugins=grpc:. hello.proto</span><br></pre></td></tr></table></figure>
+<p>插件会为服务端和客户端生成不同接口</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> HelloServiceServer <span class="keyword">interface</span> &#123;</span><br><span class="line">    Hello(context.Context, *String) (*String, error)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> HelloServiceClient <span class="keyword">interface</span> &#123;</span><br><span class="line">    Hello(context.Context, *String, ...grpc.CallOption) (*String, error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>服务端基于接口重新实现服务。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> HelloServiceImpl <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span><span class="params">(p *HelloServiceImpl)</span> <span class="title">Hello</span><span class="params">(ctx context.Contex, args *String)</span> <span class="params">(*String, error)</span></span> &#123;</span><br><span class="line">    reply := &amp;String&#123;Value: <span class="string">"Hello:"</span> + args.GetValue() &#125;</span><br><span class="line">    <span class="keyword">return</span> reply, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动grpc服务</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    grpcService := grpc.NewServer()</span><br><span class="line">    RegisterHelloServiceServer(grpcServer, <span class="built_in">new</span>(HelloServiceImpl))</span><br><span class="line">    lis, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">":1234"</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    grpcServer.Serve(lis)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>客户端连接</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    conn, err := grpc.Dial(<span class="string">"localhost:1234"</span>, grpc.WithInsecure()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> conn.Close()</span><br><span class="line">    client := NewHelloServiceClient(conn)</span><br><span class="line">    reply, err := client.Hello(context.Backgroud(), &amp;String&#123;Value:<span class="string">"hello"</span>&#125;)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(reply.GetValue())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2019/01/02/rpc/" data-id="cjtzixklb001874x8z99qegm4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grpc/">grpc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rpc/">rpc</a></li></ul>
 
     </footer>
   </div>
@@ -343,7 +428,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2019/01/02/quick-sort/" data-id="cjtzissto000xdgx8wyt8z8wv" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2019/01/02/quick-sort/" data-id="cjtzixkl2001074x8qyflkpkl" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/algorithms/">algorithms</a></li></ul>
@@ -389,7 +474,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/17/redis-bloom/" data-id="cjtzisst70009dgx8x88qd74h" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/17/redis-bloom/" data-id="cjtzixkkc000974x87l23tt6z" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bloom/">bloom</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
@@ -433,7 +518,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/17/redis-hyperloglog/" data-id="cjtzisstf000fdgx850aor3ip" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/17/redis-hyperloglog/" data-id="cjtzixkl6001274x828mtkbst" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
@@ -484,7 +569,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/17/redis-transaction/" data-id="cjtzissth000jdgx8p7206xn7" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/17/redis-transaction/" data-id="cjtzixkl9001674x8jprkgk77" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
@@ -535,119 +620,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/16/redis-lock/" data-id="cjtzisstn000tdgx8jrfpt81d" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-redis" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/16/redis/" class="article-date">
-  <time datetime="2018-12-16T13:13:22.000Z" itemprop="datePublished">2018-12-16</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/redis/">redis</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/16/redis/">redis-概述</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="安装简介"><a href="#安装简介" class="headerlink" title="安装简介"></a>安装简介</h3><p>使用docker 安装<br>docker pull redis<br>docker run –name localredis -d -p6379:6379 redis<br>docker exec -it localredis redis-cli</p>
-<h3 id="redis-基本结构数据"><a href="#redis-基本结构数据" class="headerlink" title="redis 基本结构数据"></a>redis 基本结构数据</h3><ul>
-<li>string</li>
-<li>list</li>
-<li>set</li>
-<li>hash</li>
-<li>zset</li>
-</ul>
-<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><ul>
-<li>set key value</li>
-<li>setex key seconds value  //原子操作设置value及超时</li>
-<li>setnx key value //key不存在就创建</li>
-<li>get key</li>
-<li>incr key  //自增</li>
-<li>incrby key value //自增value</li>
-<li>rpush key value [value …] //入队</li>
-<li>llen key    //列表长度</li>
-<li>rpop</li>
-<li>brpop //阻塞式出队</li>
-<li>lindex key index  //慢操作，通过index获取值</li>
-<li>ltrim key start_index end_index // 获取区间[start_index, end_index]</li>
-<li>hset key field value //置key上的hash字段field 为value</li>
-<li>hgetall key </li>
-<li>hget key field</li>
-<li>hmset key field value [field value …] //批量保存</li>
-<li>sadd key value //添加集合</li>
-<li>smembers key //获取集合成员</li>
-<li>sismember key value //查询value是否存在</li>
-<li>scard key //获取集合长度</li>
-<li>spop key //删除一个成员</li>
-<li>zadd key score member  //根据score添加成员</li>
-<li>zrange key start_index end_index //获取排名区间</li>
-<li>zcard key //集合长度</li>
-<li>zrangebyscore key start_score end_score //根据score获取区间</li>
-<li>zrem key value //删除value, 可用于简单延时队列</li>
-<li>setbit key index  value //设置位图</li>
-<li>getbit key index</li>
-</ul>
-<h3 id="redis-协议"><a href="#redis-协议" class="headerlink" title="redis 协议"></a>redis 协议</h3><p>redis协议分为5种单元类型，单元结束时统一加上回车换行符号\r\n</p>
-<ul>
-<li>单行字符串 以+号开头</li>
-<li>多行字符串 以$符开头，后跟字符串长度</li>
-<li>整数值 以:号开头，后跟整数的字符串形式</li>
-<li>错误消息 以-号开头</li>
-<li>数组 以*号开头，后跟数组长度</li>
-</ul>
-<p>客户端向服务器发送的指令只有一种格式，多行字符串数组。<br>服务器向客户端回复的响应要支持多种数据结构</p>
-<h3 id="线程-io模型"><a href="#线程-io模型" class="headerlink" title="线程 io模型"></a>线程 io模型</h3><p>redis是个单线程程序。之所以单线程还能跑这么快，是因为</p>
-<ul>
-<li>所有数据都在内存中，所有的运算都是内存级别的运算</li>
-<li>使用非阻塞式io。每次io操作，能读多少，读多少，能写多少，写多少，不在io浪费时间</li>
-<li>采用事件轮询(如kqueue, epoll)，多路复用</li>
-</ul>
-<h3 id="主要应用"><a href="#主要应用" class="headerlink" title="主要应用"></a>主要应用</h3><ul>
-<li>分布式锁</li>
-<li>延时队列(应对一组消费者时，相比rabbitmq、kafka更简单)</li>
-<li>hyperLogLog 提供不精确的去重计数方案</li>
-<li>布隆过滤器</li>
-<li>漏斗限流</li>
-<li>GeoHash (GEO模块)</li>
-</ul>
-<h3 id="过期策略"><a href="#过期策略" class="headerlink" title="过期策略"></a>过期策略</h3><p>redis会将每个设置了过期时间的key放入到一个独立的字典中，以后会定时遍历这个字典来删除到期的key。除了定时遍历外，它还会使用惰性策略来删除过期的key，即客户端在访问这个key的时间，redis对key的过期时间进行检查，如果过期了就立即删除。redis默认会每秒进行十次过期扫描，扫描默认不会超过25ms，过期扫描不会遍历过期字典中所有的key，而是采用了一种简单的贪心策略</p>
-<ul>
-<li>从过期字典中随机20个key</li>
-<li>删除这20个key中已经过期的key</li>
-<li>如果过期的key比率超过1/4，重复步骤过程。</li>
-</ul>
-<p>为避免有大量key同时过期导致卡顿，可以给过期时间设置一个随机范围，不能全部在同一时间过期。</p>
-<h3 id="zrange-start-stop-总长度为-n-复杂度是多少"><a href="#zrange-start-stop-总长度为-n-复杂度是多少" class="headerlink" title="zrange start, stop, 总长度为 n, 复杂度是多少"></a>zrange start, stop, 总长度为 n, 复杂度是多少</h3><p>o(M+log(N)), M 是结果集基数 stop-start</p>
-<h3 id="为什么在业务里用-Redis-Redis-有什么优点"><a href="#为什么在业务里用-Redis-Redis-有什么优点" class="headerlink" title="为什么在业务里用 Redis, Redis 有什么优点"></a>为什么在业务里用 Redis, Redis 有什么优点</h3><p>单线程：并发安全；高性能；原语与数据结构丰富；采用广泛，踩坑成本低</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/16/redis/" data-id="cjtzisstj000mdgx896w81svk" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/16/redis-lock/" data-id="cjtzixkl8001474x8pv2zqmbb" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
@@ -684,7 +657,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bloom/">bloom</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bloom/">bloom</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grpc/">grpc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rpc/">rpc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
     </div>
   </div>
 
@@ -694,7 +667,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/algorithms/" style="font-size: 15px;">algorithms</a> <a href="/tags/bloom/" style="font-size: 10px;">bloom</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/redis/" style="font-size: 20px;">redis</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 15px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/algorithms/" style="font-size: 15px;">algorithms</a> <a href="/tags/bloom/" style="font-size: 10px;">bloom</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/grpc/" style="font-size: 10px;">grpc</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/redis/" style="font-size: 20px;">redis</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 15px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -732,7 +705,7 @@
           </li>
         
           <li>
-            <a href="/2019/01/02/quick-sort/">快速排序</a>
+            <a href="/2019/01/02/rpc/">rpc简述</a>
           </li>
         
       </ul>

@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+
+  
+  <title>rpc简述 | Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="起源rpc远程过程调用，是分布式系统的一种通信方法，已经有40多年历史。nginx、redis、mysql、dubbo、hadoop、tensorflow等重量级开源产品都是在rpc技术的基础上构建上起来的。这里的rpc指的是广义的rpc，也就是分布式系统的通信技术。 交互流程 rpc是两个子系统之前进行的直接消息交互，它使用操作系统提供的套接字作为消息载体，以特定的消息格式来定义消息内容和边界">
+<meta name="keywords" content="rpc,grpc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="rpc简述">
+<meta property="og:url" content="http://flwwsg.github.io/2019/01/02/rpc/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="起源rpc远程过程调用，是分布式系统的一种通信方法，已经有40多年历史。nginx、redis、mysql、dubbo、hadoop、tensorflow等重量级开源产品都是在rpc技术的基础上构建上起来的。这里的rpc指的是广义的rpc，也就是分布式系统的通信技术。 交互流程 rpc是两个子系统之前进行的直接消息交互，它使用操作系统提供的套接字作为消息载体，以特定的消息格式来定义消息内容和边界">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-02T08:31:56.250Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="rpc简述">
+<meta name="twitter:description" content="起源rpc远程过程调用，是分布式系统的一种通信方法，已经有40多年历史。nginx、redis、mysql、dubbo、hadoop、tensorflow等重量级开源产品都是在rpc技术的基础上构建上起来的。这里的rpc指的是广义的rpc，也就是分布式系统的通信技术。 交互流程 rpc是两个子系统之前进行的直接消息交互，它使用操作系统提供的套接字作为消息载体，以特定的消息格式来定义消息内容和边界">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://flwwsg.github.io"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-rpc" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/01/02/rpc/" class="article-date">
+  <time datetime="2019-01-02T14:31:06.000Z" itemprop="datePublished">2019-01-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      rpc简述
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="起源"><a href="#起源" class="headerlink" title="起源"></a>起源</h3><p>rpc远程过程调用，是分布式系统的一种通信方法，已经有40多年历史。nginx、redis、mysql、dubbo、hadoop、tensorflow等重量级开源产品都是在rpc技术的基础上构建上起来的。这里的rpc指的是广义的rpc，也就是分布式系统的通信技术。</p>
+<h3 id="交互流程"><a href="#交互流程" class="headerlink" title="交互流程"></a>交互流程</h3><ul>
+<li><p>rpc是两个子系统之前进行的直接消息交互，它使用操作系统提供的套接字作为消息载体，以特定的消息格式来定义消息内容和边界</p>
+</li>
+<li><p>rpc客户端通过文件描述符的读写api来访问操作系统内核中的网络模块为当前套接字分配的发送和接收缓存(send buffer, recv buffer)</p>
+</li>
+</ul>
+<h3 id="协议"><a href="#协议" class="headerlink" title="协议"></a>协议</h3><ul>
+<li>消息边界。rpc需要在一条tcp链接上进行多次消息传递，有连续的两条消息之间必须有明确的分割规则，以便接收端可以将消息分割开来。比较常用的是特殊分割符法和长度前缀法。</li>
+<li>消息的结构。每条消息都有它包含的语义结构信息，有些消息协议的结构信息是显式的，有些是隐式的。</li>
+<li>消息压缩。</li>
+<li>优化流量。采用变长整数varint以及zigzag编码——将负数编码成正奇数，正数编码成偶数。</li>
+</ul>
+<h3 id="go-sdk调用方法"><a href="#go-sdk调用方法" class="headerlink" title="go sdk调用方法"></a>go sdk调用方法</h3><ul>
+<li>定义服务。hello服务, Hello方法必须满足Go语言的RPC规则：方法只能有两个可序列化的参数，其中第二个参数是指针类型，并且返回一个error类型，同时必须是公开的方法</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> HelloService <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span><span class="params">(p *HelloService)</span> <span class="title">Hello</span><span class="params">(request <span class="keyword">string</span>, reply *<span class="keyword">string</span>)</span> <span class="title">error</span></span>&#123;</span><br><span class="line">    *reply = <span class="string">"hello:"</span> + request</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>注册。将HelloService类型的对象注册为一个RPC服务,其中rpc.Register函数调用会将对象类型中所有满足RPC规则的对象方法注册为RPC函数，所有注册的方法会放在“HelloService”服务空间之下。然后我们建立一个唯一的TCP链接，并且通过rpc.ServeConn函数在该TCP链接上为对方提供RPC服务</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    rpc.RegisterName(<span class="string">"HelloService"</span>, <span class="built_in">new</span>(HelloService)</span><br><span class="line">    listener, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">":1234"</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(<span class="string">"ListenTCP error:"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">    conn, err := listener.Accept()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(<span class="string">"Accept error:"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">    rpc.ServeConn(conn)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>客户端连接。首选是通过rpc.Dial拨号RPC服务，然后通过client.Call调用具体的RPC方法。在调用client.Call时，第一个参数是用点号链接的RPC服务名字和方法名字，第二和第三个参数分别我们定义RPC方法的两个参数。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    client, err := rpc.Dial(<span class="string">"tcp"</span>, <span class="string">"localhost:1234"</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatal(<span class="string">"dialing:"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">var</span> reply <span class="keyword">string</span></span><br><span class="line">    err = client.Call(<span class="string">"HelloService.Hello"</span>, <span class="string">"hello"</span>, &amp;reply)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">println</span>(reply)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="grpc调用方法"><a href="#grpc调用方法" class="headerlink" title="grpc调用方法"></a>grpc调用方法</h3><p>如果从Protobuf的角度看，gRPC只不过是一个针对service接口生成代码的生成器</p>
+<ul>
+<li><p>创建proto文件，定义服务接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">syntax = &quot;proto3&quot;</span><br><span class="line">package main;</span><br><span class="line">message String&#123;</span><br><span class="line">    string value = 1;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">service HelloService &#123;</span><br><span class="line">    rpc Hello(String)returns(String);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用protoc-gen-go内置的gRPC插件生成gRPC代码：</p>
+</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">protoc --go_out=plugins=grpc:. hello.proto</span><br></pre></td></tr></table></figure>
+<p>插件会为服务端和客户端生成不同接口</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> HelloServiceServer <span class="keyword">interface</span> &#123;</span><br><span class="line">    Hello(context.Context, *String) (*String, error)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> HelloServiceClient <span class="keyword">interface</span> &#123;</span><br><span class="line">    Hello(context.Context, *String, ...grpc.CallOption) (*String, error)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>服务端基于接口重新实现服务。</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> HelloServiceImpl <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span><span class="params">(p *HelloServiceImpl)</span> <span class="title">Hello</span><span class="params">(ctx context.Contex, args *String)</span> <span class="params">(*String, error)</span></span> &#123;</span><br><span class="line">    reply := &amp;String&#123;Value: <span class="string">"Hello:"</span> + args.GetValue() &#125;</span><br><span class="line">    <span class="keyword">return</span> reply, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>启动grpc服务</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    grpcService := grpc.NewServer()</span><br><span class="line">    RegisterHelloServiceServer(grpcServer, <span class="built_in">new</span>(HelloServiceImpl))</span><br><span class="line">    lis, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">":1234"</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    grpcServer.Serve(lis)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>客户端连接</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    conn, err := grpc.Dial(<span class="string">"localhost:1234"</span>, grpc.WithInsecure()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> conn.Close()</span><br><span class="line">    client := NewHelloServiceClient(conn)</span><br><span class="line">    reply, err := client.Hello(context.Backgroud(), &amp;String&#123;Value:<span class="string">"hello"</span>&#125;)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span>&#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(reply.GetValue())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2019/01/02/rpc/" data-id="cjtzixklb001874x8z99qegm4" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/grpc/">grpc</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rpc/">rpc</a></li></ul>
+
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2019/01/02/dijkstra/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          dijkstra(最短路算法)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/01/02/quick-sort/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">快速排序</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Categories</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/golang/">golang</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/http/">http</a></li><li class="category-list-item"><a class="category-list-link" href="/categories/redis/">redis</a><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/redis/lock/">lock</a></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tcp/">tcp</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/algorithms/">algorithms</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/bloom/">bloom</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/grpc/">grpc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/http/">http</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/https/">https</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/redis/">redis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/rpc/">rpc</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/sql/">sql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/zk/">zk</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/algorithms/" style="font-size: 15px;">algorithms</a> <a href="/tags/bloom/" style="font-size: 10px;">bloom</a> <a href="/tags/golang/" style="font-size: 15px;">golang</a> <a href="/tags/grpc/" style="font-size: 10px;">grpc</a> <a href="/tags/http/" style="font-size: 10px;">http</a> <a href="/tags/https/" style="font-size: 10px;">https</a> <a href="/tags/redis/" style="font-size: 20px;">redis</a> <a href="/tags/rpc/" style="font-size: 10px;">rpc</a> <a href="/tags/sql/" style="font-size: 10px;">sql</a> <a href="/tags/tcp/" style="font-size: 15px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/zk/" style="font-size: 10px;">zk</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/04/">April 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/01/">January 2019</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/12/">December 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2019/04/02/simple-question/">simple-question</a>
+          </li>
+        
+          <li>
+            <a href="/2019/03/02/sample/">蓄水池采样算法</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/05/golang-questions/">golang-集锦</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/02/dijkstra/">dijkstra(最短路算法)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/02/rpc/">rpc简述</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2019 John Doe<br>
+      Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+
+
+  </div>
+</body>
+</html>
