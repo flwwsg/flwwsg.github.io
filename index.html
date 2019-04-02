@@ -139,10 +139,132 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2019/01/05/golang-questions/" data-id="cjtze81kh000avsx8opdsbmqn" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2019/01/05/golang-questions/" data-id="cjtzffy3r000b94x8cwr3i3jz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/面试/">面试</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-tcp-udp" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/09/05/tcp-udp/" class="article-date">
+  <time datetime="2018-09-05T14:20:10.000Z" itemprop="datePublished">2018-09-05</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/09/05/tcp-udp/">tcp-udp</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h3 id="TCP-和-UDP-有什么区别"><a href="#TCP-和-UDP-有什么区别" class="headerlink" title="TCP 和 UDP 有什么区别"></a>TCP 和 UDP 有什么区别</h3><table>
+<thead>
+<tr>
+<th>-</th>
+<th>tcp</th>
+<th>udp</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>是否面对连接</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>数据模式</td>
+<td>流模式（stream)</td>
+<td>数据报文模式(datagram)</td>
+</tr>
+<tr>
+<td>服务质量</td>
+<td>提供可靠的服务，无差错，不丢失，不重复，且按序到达</td>
+<td>尽力而为（啥也不保证）</td>
+</tr>
+<tr>
+<td>实现难度</td>
+<td>复杂，提供复杂的控制机制，包括丢包重发，流量阻塞控制，对乱序的分包进行顺序控制</td>
+<td>简单，仅具备基本错误检查和校验和</td>
+</tr>
+<tr>
+<td>客户端连接数</td>
+<td>1对1</td>
+<td>1对1, 1对多，多对多， 多对1</td>
+</tr>
+<tr>
+<td>报文头部字节数</td>
+<td>20字节</td>
+<td>8字节</td>
+</tr>
+<tr>
+<td>常用协议</td>
+<td>HTTP, HTTPs, FTP, SMTP and Telnet</td>
+<td>DNS, DHCP, TFTP, SNMP, RIP, and VoIP</td>
+</tr>
+</tbody>
+</table>
+<h3 id="建立一个-socket-连接要经过哪些步骤"><a href="#建立一个-socket-连接要经过哪些步骤" class="headerlink" title="建立一个 socket 连接要经过哪些步骤"></a>建立一个 socket 连接要经过哪些步骤</h3><h4 id="tcp-服务端"><a href="#tcp-服务端" class="headerlink" title="tcp(服务端)"></a>tcp(服务端)</h4><ul>
+<li>新建 socket() //socket.AF_INET, socket.SOCK_STREAM</li>
+<li>设置socket属性，用setsockopt()(可选)</li>
+<li>绑定IP地址、端口等信息到socket上，用函数bind()</li>
+<li>开启监听，用函数listen()</li>
+<li>接收客户端上来的连接，用函数accept()</li>
+<li>收发数据，用函数send()和recv()，或者read()和write()</li>
+<li>关闭网络连接</li>
+<li>关闭监听</li>
+</ul>
+<h4 id="tcp-客户端"><a href="#tcp-客户端" class="headerlink" title="tcp(客户端)"></a>tcp(客户端)</h4><ul>
+<li>新建 socket() //socket.AF_INET, socket.SOCK_STREAM</li>
+<li>设置socket属性，用setsockopt()(可选)</li>
+<li>绑定IP地址、端口等信息到socket上，用函数bind() (可选)</li>
+<li>设置要连接的对方的IP地址和端口等属性</li>
+<li>连接服务器，用函数connect()</li>
+<li>收发数据，用函数send()和recv()，或者read()和write()</li>
+<li>关闭网络连接</li>
+</ul>
+<h4 id="udp-服务端"><a href="#udp-服务端" class="headerlink" title="udp(服务端)"></a>udp(服务端)</h4><ul>
+<li>创建一个socket，用函数socket()</li>
+<li>设置socket属性，用函数setsockopt()(可选)</li>
+<li>绑定IP地址、端口等信息到socket上，用函数bind()</li>
+<li>循环接收数据，用函数recvfrom()</li>
+<li>关闭网络连接</li>
+</ul>
+<h4 id="udp-客户端"><a href="#udp-客户端" class="headerlink" title="udp(客户端)"></a>udp(客户端)</h4><ul>
+<li>创建一个socket，用函数socket()</li>
+<li>设置socket属性，用函数setsockopt() (可选)</li>
+<li>绑定IP地址、端口等信息到socket上，用函数bind()(可选)</li>
+<li>设置对方的IP地址和端口等属性</li>
+<li>发送数据，用函数sendto()</li>
+<li>关闭网络连接</li>
+</ul>
+<p><strong><em>go 服务端</em></strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">handleConn</span><span class="params">(c net.Conn)</span></span> &#123;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		err := c.Close()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		<span class="comment">// do something</span></span><br><span class="line">		<span class="built_in">println</span>(<span class="string">"do something"</span>)</span><br><span class="line">		<span class="keyword">break</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	sock, err := net.Listen(<span class="string">"tcp"</span>, <span class="string">":8080"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> &#123;</span><br><span class="line">		conn, err := sock.Accept()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">go</span> handleConn(conn)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong><em>go 客户端</em></strong></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	conn, err := net.Dial(<span class="string">"tcp"</span>, <span class="string">"127.0.0.1:8080"</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">		err := conn.Close()</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			log.Fatal(err)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;()</span><br><span class="line">	<span class="comment">// do something</span></span><br><span class="line">	<span class="built_in">println</span>(<span class="string">"connected"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-udp/" data-id="cjtzffy3v000e94x8co7m303g" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/udp/">udp</a></li></ul>
 
     </footer>
   </div>
@@ -198,7 +320,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtze81lf000jvsx883e72o4a" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtzffy3x000f94x8u1450djv" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li></ul>
@@ -263,7 +385,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/02/goroutine-scheduler/" data-id="cjtze81l6000hvsx856q13p5u" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/02/goroutine-scheduler/" data-id="cjtzffy3o000a94x84fqewbev" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
@@ -295,7 +417,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tags</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/golang/">golang</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/tcp/">tcp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/udp/">udp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/面试/">面试</a></li></ul>
     </div>
   </div>
 
@@ -305,7 +427,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
-      <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/tcp/" style="font-size: 10px;">tcp</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
+      <a href="/tags/golang/" style="font-size: 20px;">golang</a> <a href="/tags/tcp/" style="font-size: 20px;">tcp</a> <a href="/tags/udp/" style="font-size: 10px;">udp</a> <a href="/tags/面试/" style="font-size: 10px;">面试</a>
     </div>
   </div>
 
@@ -328,6 +450,10 @@
         
           <li>
             <a href="/2019/01/05/golang-questions/">golang-集锦</a>
+          </li>
+        
+          <li>
+            <a href="/2018/09/05/tcp-udp/">tcp-udp</a>
           </li>
         
           <li>
