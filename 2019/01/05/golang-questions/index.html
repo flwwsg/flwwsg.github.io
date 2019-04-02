@@ -5,15 +5,20 @@
   
 
   
-  <title>Hexo</title>
+  <title>golang-集锦 | Hexo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Hexo">
-<meta property="og:url" content="http://flwwsg.github.io/index.html">
+  <meta name="description" content="golang 的gc算法(垃圾回收)三色标记算法(golang sdk runtime文件夹中实现)  起初所有对象都是白色 从根出发扫描所有可达对象，标记为灰色，放入待处理队列 从队列取出灰色对象，将其引用对象标记为灰色放入队列，自身标记为黑色 重复上述过程，直到灰色对象队列为空。此时白色对象即为垃圾，进行回收  Golang 里的内存逃逸分析在编译程序优化理论中，逃逸分析是一种确定指针动态范围">
+<meta name="keywords" content="golang,面试">
+<meta property="og:type" content="article">
+<meta property="og:title" content="golang-集锦">
+<meta property="og:url" content="http://flwwsg.github.io/2019/01/05/golang-questions/index.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="golang 的gc算法(垃圾回收)三色标记算法(golang sdk runtime文件夹中实现)  起初所有对象都是白色 从根出发扫描所有可达对象，标记为灰色，放入待处理队列 从队列取出灰色对象，将其引用对象标记为灰色放入队列，自身标记为黑色 重复上述过程，直到灰色对象队列为空。此时白色对象即为垃圾，进行回收  Golang 里的内存逃逸分析在编译程序优化理论中，逃逸分析是一种确定指针动态范围">
 <meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2019-04-02T06:12:50.295Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hexo">
+<meta name="twitter:title" content="golang-集锦">
+<meta name="twitter:description" content="golang 的gc算法(垃圾回收)三色标记算法(golang sdk runtime文件夹中实现)  起初所有对象都是白色 从根出发扫描所有可达对象，标记为灰色，放入待处理队列 从队列取出灰色对象，将其引用对象标记为灰色放入队列，自身标记为黑色 重复上述过程，直到灰色对象队列为空。此时白色对象即为垃圾，进行回收  Golang 里的内存逃逸分析在编译程序优化理论中，逃逸分析是一种确定指针动态范围">
   
     <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
   
@@ -60,9 +65,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-golang-questions" class="article article-type-post" itemscope itemprop="blogPost">
+        <section id="main"><article id="post-golang-questions" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2019/01/05/golang-questions/" class="article-date">
   <time datetime="2019-01-05T14:20:10.000Z" itemprop="datePublished">2019-01-05</time>
@@ -79,8 +82,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/01/05/golang-questions/">golang-集锦</a>
+    <h1 class="article-title" itemprop="name">
+      golang-集锦
     </h1>
   
 
@@ -147,135 +150,19 @@
     </footer>
   </div>
   
-</article>
-
-
+    
+<nav id="article-nav">
   
-    <article id="post-tcp-handshake" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/05/tcp-handshake/" class="article-date">
-  <time datetime="2018-09-05T14:20:10.000Z" itemprop="datePublished">2018-09-05</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/tcp/">tcp</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/05/tcp-handshake/">TCP三次握手、四次挥手的过程</a>
-    </h1>
+    <a href="/2018/09/05/tcp-handshake/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">TCP三次握手、四次挥手的过程</div>
+    </a>
   
+</nav>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h3 id="TCP三次握手"><a href="#TCP三次握手" class="headerlink" title="TCP三次握手"></a>TCP三次握手</h3><h4 id="第一次握手"><a href="#第一次握手" class="headerlink" title="第一次握手"></a>第一次握手</h4><p>client发送一个SYN(J)包给server，然后等待server的ACK回复，进入SYN-SENT状态。ps: SYN为synchronize的缩写，ACK为acknowledgment的缩写。</p>
-<h4 id="第二次握手"><a href="#第二次握手" class="headerlink" title="第二次握手"></a>第二次握手</h4><p>server接收到SYN(seq=J)包后就返回一个ACK(J+1)包以及一个自己的<strong>SYN(K)</strong>包，然后等待client的ACK回复，server进入SYN-RECIVED状态。</p>
-<h4 id="第三次握手"><a href="#第三次握手" class="headerlink" title="第三次握手"></a>第三次握手</h4><p>client接收到server发回的ACK(J+1)包后，进入ESTABLISHED状态。然后根据server发来的SYN(K)包，返回给等待中的server一个ACK(K+1)包。等待中的server收到ACK回复，也把自己的状态设置为ESTABLISHED。到此TCP三次握手完成，client与server可以正常进行通信了</p>
-<p><strong><em>为什么要进行三次握手</em></strong></p>
-<p>三次握手中的客户端和服务器之间的握手过程比喻成A和B通信的过程:</p>
-<p>在第一次通信过程中，A向B发送信息之后，B收到信息后可以确认自己的收信能力和A的发信能力没有问题。</p>
-<p>在第二次通信中，B向A发送信息之后，A可以确认自己的发信能力和B的收信能力没有问题，<strong><em>但是B不知道自己的发信能力到底如何</em></strong>，所以就需要第三次通信。</p>
-<p>在第三次通信中，A向B发送信息之后，B就可以确认自己的发信能力没有问题。</p>
-<h3 id="四次挥手"><a href="#四次挥手" class="headerlink" title="四次挥手"></a>四次挥手</h3><h4 id="第一次挥手"><a href="#第一次挥手" class="headerlink" title="第一次挥手"></a>第一次挥手</h4><p>client发送一个FIN(M)包，此时client进入FIN-WAIT-1状态，这表明client已经没有数据要发送了。</p>
-<h4 id="第二次挥手"><a href="#第二次挥手" class="headerlink" title="第二次挥手"></a>第二次挥手</h4><p>server收到了client发来的FIN(M)包后，向client发回一个ACK(M+1)包，此时server进入CLOSE-WAIT状态，client进入FIN-WAIT-2状态。</p>
-<h4 id="第三次挥手"><a href="#第三次挥手" class="headerlink" title="第三次挥手"></a>第三次挥手</h4><p>server向client发送FIN(N)包，请求关闭连接，同时server进入LAST-ACK状态。</p>
-<h4 id="第四次挥手"><a href="#第四次挥手" class="headerlink" title="第四次挥手"></a>第四次挥手</h4><p>client收到server发送的FIN(N)包，进入TIME-WAIT状态。向server发送<strong>ACK(N+1)</strong>包，server收到client的ACK(N+1)包以后，进入CLOSE状态；client等待一段时间还没有得到回复后判断server已正式关闭，进入CLOSE状态。</p>
-<p><strong><em>第二次挥手、第三次挥手没有合并是因为tcp存在半关闭状态，即第二次挥手后，客户端没有东西发给服务端，but服务端还可以向客户端下发数据（tcp是全双工）</em></strong></p>
-<p><strong><em>关于非常特殊time_wait状态</em></strong></p>
-<p>它是主动关闭的一方在回复完对方的挥手后进入的一个长期状态，这个状态标准的持续时间是4分钟，4分钟后才会进入到closed状态，释放套接字资源。不过在具体实现上这个时间是可以调整的。</p>
-<p>它的作用是重传最后一个ack报文，确保对方可以收到。因为如果对方没有收到ack的话，会重传fin报文，处于time_wait状态的套接字会立即向对方重发ack报文。</p>
-<p>同时在这段时间内，该链接在对话期间于网际路由上产生的残留报文(因为路径过于崎岖，数据报文走的时间太长，重传的报文都收到了，原始报文还在路上)传过来时，都会被立即丢弃掉。4分钟的时间足以使得这些残留报文彻底消逝。不然当新的端口被重复利用时，这些残留报文可能会干扰新的链接。<br>4分钟就是2个MSL，每个MSL是2分钟。MSL就是maximium segment lifetime——最长报文寿命。这个时间是由官方RFC协议规定的。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtze81lf000jvsx883e72o4a" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li></ul>
-
-    </footer>
-  </div>
   
 </article>
-
-
-  
-    <article id="post-goroutine-scheduler" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/09/02/goroutine-scheduler/" class="article-date">
-  <time datetime="2018-09-02T13:15:21.000Z" itemprop="datePublished">2018-09-02</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/golang/">golang</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/09/02/goroutine-scheduler/">goroutine-调度</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <h2 id="G-P-M"><a href="#G-P-M" class="headerlink" title="G, P, M"></a>G, P, M</h2><ul>
-<li>G: 表示goroutine，存储了goroutine的执行stack信息、goroutine状态以及goroutine的任务函数等；另外G对象是可以重用的。</li>
-<li>P: 表示逻辑processor，P的数量决定了系统内最大可并行的G的数量（前提：系统的物理cpu核数&gt;=P的数量）；P的最大作用还是其拥有的各种G对象队列、链表、一些cache和状态。</li>
-<li>M: M代表着真正的执行计算资源。在绑定有效的p后，进入schedule循环；而schedule循环的机制大致是从各种队列、p的本地队列中获取G，切换到G的执行栈上并执行G的函数，调用goexit做清理工作并回到m，如此反复。M并不保留G状态，这是G可以跨M调度的基础。</li>
-</ul>
-<blockquote>
-<p><img src="/images/goroutine-scheduler-model.png" alt></p>
-</blockquote>
-<p>P是一个“逻辑Proccessor”，每个G要想真正运行起来，首先需要被分配一个P（进入到P的local runq中，这里暂忽略global runq那个环节）。对于G来说，P就是运行它的“CPU”，可以说：G的眼里只有P。但从Go scheduler视角来看，真正的“CPU”是M，只有将P和M绑定才能让P的runq中G得以真实运行起来。这样的P与M的关系，就好比Linux操作系统调度层面用户线程(user thread)与核心线程(kernel thread)的对应关系那样(N x M)。</p>
-<p>和操作系统按时间片调度线程不同，Go并没有时间片的概念。如果某个G没有进行system call调用、没有进行I/O操作、没有阻塞在一个channel操作上，那么m是如何让G停下来并调度下一个runnable G的呢？答案是：G是被抢占调度的。</p>
-<p>除非极端的无限循环或死循环，否则只要G调用函数，Go runtime就有抢占G的机会。Go程序启动时，runtime会去启动一个名为sysmon的m(一般称为监控线程)，该m无需绑定p即可运行，该m在整个Go程序的运行过程中至关重要：sysmon每20us~10ms启动一次，sysmon主要完成如下工作：</p>
-<ul>
-<li>释放闲置超过5分钟的span物理内存</li>
-<li>如果超过2分钟没有垃圾回收，强制执行</li>
-<li>将长时间未处理的netpoll结果添加到任务队列</li>
-<li>向长时间运行的G任务发出抢占调度</li>
-<li>收回因syscall长时间阻塞的P</li>
-</ul>
-<p>所以一个G任务运行10ms，sysmon就会认为其运行时间太久而发出抢占式调度的请求。一旦G的抢占标志位被设为true，那么待这个G下一次调用函数或方法时，runtime便可以将G抢占，并移出运行状态，放入P的local runq中，等待下一次被调度。</p>
-<h3 id="channel阻塞或network-I-O情况下的调度"><a href="#channel阻塞或network-I-O情况下的调度" class="headerlink" title="channel阻塞或network I/O情况下的调度"></a>channel阻塞或network I/O情况下的调度</h3><p>如果G被阻塞在某个channel操作或network I/O操作上时，G会被放置到某个wait队列中，而M会尝试运行下一个runnable的G；如果此时没有runnable的G供m运行，那么m将解绑P，并进入sleep状态。当I/O available或channel操作完成，在wait队列中的G会被唤醒，标记为runnable，放入到某P的队列中，绑定一个M继续执行。</p>
-<h3 id="system-call阻塞情况下的调度"><a href="#system-call阻塞情况下的调度" class="headerlink" title="system call阻塞情况下的调度"></a>system call阻塞情况下的调度</h3><p>如果G被阻塞在某个system call操作上，那么不光G会阻塞，执行该G的M也会解绑P(实质是被sysmon抢走了)，与G一起进入sleep状态。如果此时有idle的M，则P与其绑定继续执行其他G；如果没有idle M，但仍然有其他G要去执行，那么就会创建一个新M。</p>
-<p>当阻塞在syscall上的G完成syscall调用后，G会去尝试获取一个可用的P，如果没有可用的P，那么G会被标记为runnable，之前的那个sleep的M将再次进入sleep。</p>
-<p><strong><em>调度器状态的查看方法</em></strong><br>使用Go运行时环境变量GODEBUG</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/02/goroutine-scheduler/" data-id="cjtze81l6000hvsx856q13p5u" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-
 
 </section>
         
