@@ -15,7 +15,7 @@
 <meta property="og:description" content="启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100123456789101112131415161718192021222324252627//启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100func Prin">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://flwwsg.github.io/images/mn.gif">
-<meta property="og:updated_time" content="2019-04-02T07:56:35.015Z">
+<meta property="og:updated_time" content="2019-04-02T08:01:57.927Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="simple-question">
 <meta name="twitter:description" content="启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100123456789101112131415161718192021222324252627//启动两个线程, 一个输出 1,3,5,7…99, 另一个输出 2,4,6,8…100 最后 STDOUT 中按序输出 1,2,3,4,5…100func Prin">
@@ -101,7 +101,7 @@
 <li><p>初始化三个指针p, q, r全部指向head. 然后p以2的速度行进, q以1的速度行进.当p和q相遇的时候, 发出r指针并以1的速度行进, 当p和r相遇返回这个结点.复杂度O(n)</p>
 </li>
 </ul>
-<p>设环的长度为n， head到入环点的距离为t， p、q第一次相遇时，p走的路程为x，入环点到相遇点的距离为d， 则q的路程为2x， 且x+n= 2x, x=t+d。所以n=t+d。</p>
+<p>设环的长度为n， head到入环点的距离为t， p、q第一次相遇时，q走的路程为x，入环点到相遇点的距离为d， 则p的路程为2x， 且x+n= 2x, x=t+d。所以n=t+d。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">node_t</span> *find_entry(<span class="keyword">node_t</span> *head)&#123;</span><br><span class="line">	<span class="keyword">node_t</span> *p, *q, *r;</span><br><span class="line">	<span class="keyword">for</span> (p = q = head; p; p = p -&gt; next, q = q -&gt; next)&#123;</span><br><span class="line">		p = p -&gt; next;</span><br><span class="line">		<span class="keyword">if</span>(!p) <span class="keyword">break</span>;</span><br><span class="line">		<span class="keyword">if</span> (p==q) <span class="keyword">break</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">if</span> (!p) <span class="keyword">return</span> <span class="number">0</span> ; <span class="comment">//没有环</span></span><br><span class="line">	<span class="keyword">for</span>( r= head,, q= q-&gt;; q != r; r = r-&gt;next; q = q-&gt;nex);</span><br><span class="line">	<span class="keyword">return</span> r</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <h3 id="M-N-横向递增矩阵找指定数"><a href="#M-N-横向递增矩阵找指定数" class="headerlink" title="M*N 横向递增矩阵找指定数"></a>M*N 横向递增矩阵找指定数</h3><p>定位法<br>首先直接定位到最右上角的元素，再配以二分查找，比要找的数（6）大就往左走，比要找数（6）的小就往下走，直到找到要找的数字（6）为止，这个方法的时间复杂度O（m+n）。如下图示：</p>
 <blockquote>
