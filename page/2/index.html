@@ -62,52 +62,6 @@
       <div class="outer">
         <section id="main">
   
-    <article id="post-redis-bloom" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/12/17/redis-bloom/" class="article-date">
-  <time datetime="2018-12-17T14:20:56.000Z" itemprop="datePublished">2018-12-17</time>
-</a>
-    
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/redis/">redis</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/12/17/redis-bloom/">redis 布隆过滤器</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>布隆过滤器可以理解为一个不怎么精确的set结构，当你使用它的contains方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判率。当布隆过滤说某个值存在时，这个值可能不存在；当它说不存在时，那就肯定不存在。  </p>
-<p>向布隆过滤器中添加key时，会使用多个hash函数对key进行hash算得一个整数索引值，然后对位数组长度进行取模运算得到一个位置，每个hash函数都会算得一个不同的位置。再把位数组的这几个位置都置为1就完成了add操作。</p>
-<p>向布隆过滤器询问key是否存在时，跟add一样，也会把hash的几个位置都算出来，看看位数组中这几个位置是否都为1，只要有一个为0，说明布隆过滤器这个key不存在。如果都为1，并不能说明这个key一定存在，只是极有可能存在，因为这些位被置为1可能是因为其它key存在所致。如果这个位数组比稀疏，这个概率就会很大，如果 这个位数组比较拥挤，这个概率就会降低。</p>
-<p>布隆过滤器作为一个插件提供。有二个基本指令，bf.add添加元素，bf.exists查询元素是否存在，它的用法和set集合的sadd和sismember差不多。bf.madd指令一次添加多个，bf.mexists一次查询多个元素是否存在。bf.reserve 用于自定义参数布隆过滤器，有3个参数，分别是key， error_rate和initial_size。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/17/redis-bloom/" data-id="cju25o0yj000uzox8vp4srh3x" class="article-share-link">Share</a>
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bloom-filter/">bloom filter</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-  
     <article id="post-redis-lock" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/16/redis-lock/" class="article-date">
@@ -318,6 +272,87 @@
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/micro-service/">micro-service</a></li></ul>
 
+    </footer>
+  </div>
+  
+</article>
+
+
+  
+    <article id="post-gen-doc" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/03/gen-doc/" class="article-date">
+  <time datetime="2018-11-03T13:20:08.000Z" itemprop="datePublished">2018-11-03</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/11/03/gen-doc/">记自动更新文档</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>最近boss打算让我写个自动更新接口文档的工具。类似于</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//接口功能说明如：登录</span></span><br><span class="line"><span class="keyword">type</span> LoginParams <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">//user id 描述</span></span><br><span class="line">	UserId <span class="keyword">string</span> <span class="comment">//描述2, 优先级更高</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 接口返回</span></span><br><span class="line"><span class="keyword">type</span> LoginResp <span class="keyword">struct</span> &#123;</span><br><span class="line">	<span class="comment">//role 描述</span></span><br><span class="line">	RoleID <span class="keyword">string</span></span><br><span class="line">	<span class="comment">//system time 描述</span></span><br><span class="line">	SystemTime <span class="keyword">int64</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>生成md文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">### 299 接口功能说明如：登录</span><br><span class="line"></span><br><span class="line">#### 请求</span><br><span class="line"></span><br><span class="line">字段|类型|描述|</span><br><span class="line">---|---|---</span><br><span class="line">UserId | string| 描述2, 优先级更高</span><br><span class="line"></span><br><span class="line">#### 响应</span><br><span class="line"></span><br><span class="line">字段|类型|描述|</span><br><span class="line">---|---|---</span><br><span class="line">RoleID | string | role 描述</span><br><span class="line">SystemTime | int64 | system time 描述</span><br></pre></td></tr></table></figure>
+<p>看着挺简单的。先用google搜下有没有现成或者类似的方案:)。非常遗憾没有。。。<br>既然偷懒不成，就只能自己写了。根据结构体注释生成文档，让我想起ast，查找结构体，然后通过comment，doc获取注释。<br>尝试一番后，整理出思路：</p>
+<ul>
+<li>需要一个结构体类型，用来记录代码中的结构</li>
+<li>需要一个接口类型，用来记录结构体表示的接口</li>
+<li>需要一个结构体字段类型，用来记录结构体字段</li>
+<li>需要一个结构体根据模板生成md文档</li>
+</ul>
+<p>记录结构体</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// StructType recording struct</span></span><br><span class="line"><span class="keyword">type</span> StructType <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name     <span class="keyword">string</span></span><br><span class="line">	ActionID <span class="keyword">string</span> <span class="comment">//mark action id to specify API, only request struct will be marked</span></span><br><span class="line">	Fields   []*APIField</span><br><span class="line">	Desc     <span class="keyword">string</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接口类型</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ReqAPI request part of api， 请求接口</span></span><br><span class="line"><span class="keyword">type</span> ReqAPI <span class="keyword">struct</span> &#123;</span><br><span class="line">	ActionID    <span class="keyword">string</span></span><br><span class="line">	ActionDesc  <span class="keyword">string</span></span><br><span class="line">	Fields      *[]*APIField</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// RespAPI resp part of api， 响应接口</span></span><br><span class="line"><span class="keyword">type</span> RespAPI <span class="keyword">struct</span> &#123;</span><br><span class="line">	ActionID    <span class="keyword">string</span></span><br><span class="line">	ActionDesc  <span class="keyword">string</span></span><br><span class="line">	Fields      *[]*APIField</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>字段记录</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// APIField each field of an api</span></span><br><span class="line"><span class="keyword">type</span> APIField <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name <span class="keyword">string</span></span><br><span class="line">	<span class="comment">//display name</span></span><br><span class="line">	Alias     <span class="keyword">string</span></span><br><span class="line">	ValueType <span class="keyword">string</span></span><br><span class="line">	Desc      <span class="keyword">string</span></span><br><span class="line">	Required  <span class="keyword">bool</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>生成md文档</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// SingleAPI an api</span></span><br><span class="line"><span class="keyword">type</span> SingleAPI <span class="keyword">struct</span> &#123;</span><br><span class="line">	ActionID   <span class="keyword">string</span></span><br><span class="line">	ActionDesc <span class="keyword">string</span></span><br><span class="line">	ReqFields  *[]*APIField</span><br><span class="line">	RespFields *[]*APIField</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>md模板</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// APITemplate template of md</span></span><br><span class="line"><span class="keyword">const</span> APITemplate = <span class="string">`</span></span><br><span class="line"><span class="string">### &#123;&#123;.ActionID&#125;&#125; &#123;&#123;.ActionDesc&#125;&#125;</span></span><br><span class="line"><span class="string">#### 请求</span></span><br><span class="line"><span class="string">字段|类型|描述|</span></span><br><span class="line"><span class="string">---|---|---</span></span><br><span class="line"><span class="string">&#123;&#123;range $i, $f := .ReqFields&#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;- $f.Alias&#125;&#125; | &#123;&#123;$f.ValueType | printf "%s" &#125;&#125;| &#123;&#123;printDesc $f.Desc &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;end&#125;&#125;</span></span><br><span class="line"><span class="string">#### 响应</span></span><br><span class="line"><span class="string">字段|类型|描述|</span></span><br><span class="line"><span class="string">---|---|---</span></span><br><span class="line"><span class="string">&#123;&#123;range $i, $f := .RespFields&#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;- $f.Alias&#125;&#125; | &#123;&#123;$f.ValueType | printf "%s" &#125;&#125; | &#123;&#123;printDesc $f.Desc &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;end -&#125;&#125;</span></span><br><span class="line"><span class="string">`</span></span><br></pre></td></tr></table></figure>
+<p>大致流程</p>
+<ul>
+<li>ast遍历，收集每个文件的结构体、注释</li>
+<li>收集每个包下的结构体</li>
+<li>根据规则确定请求(Params结尾的结构体名)、返回结构体(Resp结尾的结构体名)</li>
+<li>根据模板输出md文件</li>
+</ul>
+<p>其中的关键ast采集</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">collectStructs</span><span class="params">(srcPath <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">string</span>, <span class="keyword">map</span>[<span class="keyword">string</span>]*StructType)</span></span> &#123;</span><br><span class="line">	allStruct := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]*StructType, <span class="number">0</span>)</span><br><span class="line">	<span class="keyword">if</span> !strings.HasSuffix(srcPath, <span class="string">"go"</span>) &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">""</span>, allStruct</span><br><span class="line">	&#125;</span><br><span class="line">	fs := token.NewFileSet()</span><br><span class="line">	f, err := parser.ParseFile(fs, srcPath, <span class="literal">nil</span>, parser.ParseComments)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">var</span> findStruct = <span class="function"><span class="keyword">func</span><span class="params">(n ast.Node)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">		<span class="keyword">var</span> structName <span class="keyword">string</span></span><br><span class="line">		<span class="keyword">var</span> t ast.Expr</span><br><span class="line">		<span class="keyword">var</span> structDec <span class="keyword">string</span></span><br><span class="line">		<span class="comment">// get type specification</span></span><br><span class="line">		<span class="keyword">switch</span> x := n.(<span class="keyword">type</span>) &#123;</span><br><span class="line">		<span class="keyword">case</span> *ast.GenDecl:</span><br><span class="line">			<span class="keyword">if</span> <span class="built_in">len</span>(x.Specs) != <span class="number">1</span> &#123;</span><br><span class="line">				<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">			&#125;</span><br><span class="line">			structDec = x.Doc.Text()</span><br><span class="line">			<span class="keyword">switch</span> xs := x.Specs[<span class="number">0</span>].(<span class="keyword">type</span>) &#123;</span><br><span class="line">			<span class="keyword">case</span> *ast.TypeSpec:</span><br><span class="line">				structName = xs.Name.Name</span><br><span class="line">				t = xs.Type</span><br><span class="line">			&#125;</span><br><span class="line">		<span class="keyword">default</span>:</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">		x, ok := t.(*ast.StructType)</span><br><span class="line">		<span class="keyword">if</span> !ok &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">		&#125;</span><br><span class="line">		s := <span class="built_in">new</span>(StructType)</span><br><span class="line">		s.Name = structName</span><br><span class="line">		s.Fields = genField(x, srcPath)</span><br><span class="line">		s.SetDesc(structDec)</span><br><span class="line">		allStruct[structName] = s</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">	&#125;</span><br><span class="line">	ast.Inspect(f, findStruct)</span><br><span class="line">	<span class="comment">//ast.Print(fs, f)</span></span><br><span class="line">	<span class="keyword">return</span> f.Name.String(), allStruct</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>首战告捷，加入ci后，可以很好的自动更新文档。过了不久，同事反应接口里的结构体不能展示在接口文档(废话，当初就没这需求。。。)。思索一番后，决定在接口加入CustomTypes，同时加入CustomTypes模板</p>
+<p>请求、返回结构体改为：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ReqAPI request part of api</span></span><br><span class="line"><span class="keyword">type</span> ReqAPI <span class="keyword">struct</span> &#123;</span><br><span class="line">	CustomTypes []*StructType</span><br><span class="line">	ActionID    <span class="keyword">string</span></span><br><span class="line">	ActionDesc  <span class="keyword">string</span></span><br><span class="line">	Fields      *[]*APIField</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// RespAPI resp part of api</span></span><br><span class="line"><span class="keyword">type</span> RespAPI <span class="keyword">struct</span> &#123;</span><br><span class="line">	CustomTypes []*StructType</span><br><span class="line">	ActionID    <span class="keyword">string</span></span><br><span class="line">	ActionDesc  <span class="keyword">string</span></span><br><span class="line">	Fields      *[]*APIField</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>模板</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CustomTypeTemplate template for custom type</span></span><br><span class="line"><span class="keyword">const</span> CustomTypeTemplate = <span class="string">`</span></span><br><span class="line"><span class="string">### 自定义数据类型</span></span><br><span class="line"><span class="string">&#123;&#123;$length := len .&#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;- if eq $length 0&#125;&#125;</span></span><br><span class="line"><span class="string">#### 无</span></span><br><span class="line"><span class="string">&#123;&#123;end -&#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;range $i, $typ := .&#125;&#125;</span></span><br><span class="line"><span class="string">#### &#123;&#123;$typ.Name&#125;&#125;</span></span><br><span class="line"><span class="string">字段|类型|描述|</span></span><br><span class="line"><span class="string">---|---|---</span></span><br><span class="line"><span class="string">&#123;&#123;range $i, $f := $typ.Fields&#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;- $f.Alias&#125;&#125; | &#123;&#123;$f.ValueType | printf "%s" &#125;&#125; | &#123;&#123;printDesc $f.Desc &#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;end -&#125;&#125;</span></span><br><span class="line"><span class="string">&#123;&#123;end -&#125;&#125;</span></span><br></pre></td></tr></table></figure>
+<p>加入查找函数</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// GetCustomTypes find custom struct type in api using deep search</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetCustomTypes</span><span class="params">(api CustomTypes, field *APIField, pkg *<span class="keyword">map</span>[<span class="keyword">string</span>]*StructType)</span></span> &#123;</span><br><span class="line">	typeName := field.ValueType</span><br><span class="line">	<span class="keyword">if</span> s := findTypeStruct(typeName, pkg); s != <span class="literal">nil</span> &#123;</span><br><span class="line">		api.AddTypes(s)</span><br><span class="line">		<span class="keyword">for</span> _, field := <span class="keyword">range</span> s.Fields &#123;</span><br><span class="line">			GetCustomTypes(api, field, pkg)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>ok,大功告成。我原以为可以到此为至了，事实证明我太天真了。新版本上线一段时间后，又有同事提出：是否可以强制输出某些结构体，虽然接口上没用到。<br>我想了想，第一种方案是在需要显示的结构体名结尾加上Req。第二种注释里写上类似 req。第三种将需要生成文档的结构体放在同一个文件中，比如types.go。<br>思前想后，决定用第三种，这样既不会引起歧义，需要改动的代码又最少。只需要结构体加上一个Required，收集结构体时，判断下文件名，就知道是不是必须的结构体。</p>
+<p>记录结构体</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// StructType recording struct</span></span><br><span class="line"><span class="keyword">type</span> StructType <span class="keyword">struct</span> &#123;</span><br><span class="line">	Name     <span class="keyword">string</span></span><br><span class="line">	ActionID <span class="keyword">string</span> <span class="comment">//mark action id to specify API, only request struct will be marked</span></span><br><span class="line">	Fields   []*APIField</span><br><span class="line">    Desc     <span class="keyword">string</span></span><br><span class="line">    Required <span class="keyword">bool</span>  <span class="comment">//是否需要强制生成文档</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这应该是最后一次改动了吧，我在心里默念。悲剧还是发生了：现在接口只能生成在同一包下的结构体作为文档，那么可以引用不同包下的结构体作为请求、或者返回参数吗？<br>我深吸一口气，祭出大招——go/types,采集所有的结构体(如果自己用ast采集的话，一是特别容易出错，二是ast收集特别慢)，然后根据package path， struct name确定需要的生成文档的结构体。<br>至此，总算告一段落。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><ul>
+<li>代码一定要分层，解藕</li>
+<li>需求是无止尽的，要早做打算</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/11/03/gen-doc/" data-id="cju25o0xv0001zox8zj2vujrg" class="article-share-link">Share</a>
+      
+      
     </footer>
   </div>
   
@@ -786,10 +821,6 @@
       <ul>
         
           <li>
-            <a href="/2019/04/03/gen-doc/">记自动更新文档</a>
-          </li>
-        
-          <li>
             <a href="/2019/04/02/simple-question/">simple-question</a>
           </li>
         
@@ -803,6 +834,10 @@
         
           <li>
             <a href="/2019/01/02/dijkstra/">dijkstra(最短路算法)</a>
+          </li>
+        
+          <li>
+            <a href="/2019/01/02/rpc/">rpc简述</a>
           </li>
         
       </ul>
