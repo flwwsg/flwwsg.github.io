@@ -62,6 +62,52 @@
       <div class="outer">
         <section id="main">
   
+    <article id="post-redis-bloom" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/12/17/redis-bloom/" class="article-date">
+  <time datetime="2018-12-17T14:20:56.000Z" itemprop="datePublished">2018-12-17</time>
+</a>
+    
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/redis/">redis</a>
+  </div>
+
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/12/17/redis-bloom/">redis 布隆过滤器</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>布隆过滤器可以理解为一个不怎么精确的set结构，当你使用它的contains方法判断某个对象是否存在时，它可能会误判。但是布隆过滤器也不是特别不精确，只要参数设置的合理，它的精确度可以控制的相对足够精确，只会有小小的误判率。当布隆过滤说某个值存在时，这个值可能不存在；当它说不存在时，那就肯定不存在。  </p>
+<p>向布隆过滤器中添加key时，会使用多个hash函数对key进行hash算得一个整数索引值，然后对位数组长度进行取模运算得到一个位置，每个hash函数都会算得一个不同的位置。再把位数组的这几个位置都置为1就完成了add操作。</p>
+<p>向布隆过滤器询问key是否存在时，跟add一样，也会把hash的几个位置都算出来，看看位数组中这几个位置是否都为1，只要有一个为0，说明布隆过滤器这个key不存在。如果都为1，并不能说明这个key一定存在，只是极有可能存在，因为这些位被置为1可能是因为其它key存在所致。如果这个位数组比稀疏，这个概率就会很大，如果 这个位数组比较拥挤，这个概率就会降低。</p>
+<p>布隆过滤器作为一个插件提供。有二个基本指令，bf.add添加元素，bf.exists查询元素是否存在，它的用法和set集合的sadd和sismember差不多。bf.madd指令一次添加多个，bf.mexists一次查询多个元素是否存在。bf.reserve 用于自定义参数布隆过滤器，有3个参数，分别是key， error_rate和initial_size。</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://flwwsg.github.io/2018/12/17/redis-bloom/" data-id="cju25o0yj000uzox8vp4srh3x" class="article-share-link">Share</a>
+      
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/bloom-filter/">bloom filter</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+  
     <article id="post-redis-lock" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/12/16/redis-lock/" class="article-date">
@@ -101,7 +147,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/16/redis-lock/" data-id="cjtzjcsp00010csx8cpekm329" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/16/redis-lock/" data-id="cju25o0ye000kzox8u3cm45d4" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
@@ -213,7 +259,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/16/redis/" data-id="cjtzjcsox000ucsx8ddkp3zoo" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/16/redis/" data-id="cju25o0yh000qzox8xa1255oy" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/redis/">redis</a></li></ul>
@@ -267,7 +313,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/12/02/micro-service/" data-id="cjtzjcsos000ncsx81qc2loyj" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/12/02/micro-service/" data-id="cju25o0y8000dzox8gvpewp14" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/micro-service/">micro-service</a></li></ul>
@@ -332,7 +378,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/11/02/goroutine-scheduler/" data-id="cjtzjcsoe000bcsx8765ip23k" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/11/02/goroutine-scheduler/" data-id="cju25o0yd000izox81bepi2iw" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/golang/">golang</a></li></ul>
@@ -374,7 +420,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cjtzjcsp8001ccsx8aalbcwtl" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/11/02/sql/" data-id="cju25o0yn0012zox8lhog4cmz" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/sql/">sql</a></li></ul>
@@ -490,7 +536,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/http/" data-id="cjtzjcsoi000fcsx8dd78s3mi" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/http/" data-id="cju25o0y6000czox87sxq7w8c" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/http/">http</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/https/">https</a></li></ul>
@@ -549,7 +595,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cjtzjcsp9001gcsx80wp4mlt9" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-handshake/" data-id="cju25o0yw001ezox85s8wnkhx" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li></ul>
@@ -671,7 +717,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-udp/" data-id="cjtzjcspa001hcsx8be8ld8dk" class="article-share-link">Share</a>
+      <a data-url="http://flwwsg.github.io/2018/09/05/tcp-udp/" data-id="cju25o0yy001gzox8fj3u3bgj" class="article-share-link">Share</a>
       
       
   <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/tcp/">tcp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/udp/">udp</a></li></ul>
@@ -740,6 +786,10 @@
       <ul>
         
           <li>
+            <a href="/2019/04/03/gen-doc/">记自动更新文档</a>
+          </li>
+        
+          <li>
             <a href="/2019/04/02/simple-question/">simple-question</a>
           </li>
         
@@ -753,10 +803,6 @@
         
           <li>
             <a href="/2019/01/02/dijkstra/">dijkstra(最短路算法)</a>
-          </li>
-        
-          <li>
-            <a href="/2019/01/02/rpc/">rpc简述</a>
           </li>
         
       </ul>
